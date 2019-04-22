@@ -137,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String uid = auth.getCurrentUser().getUid();
-                User user = new User(uid, names, surnames, email, false);
+                User user = new User(uid, names, surnames, email, true);
                 //database.getReference().child("users").child(uid).setValue(user);
 
                 firestore.collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {

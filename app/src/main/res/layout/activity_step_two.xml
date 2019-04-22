@@ -7,7 +7,7 @@
     tools:context=".StepOneActivity">
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/two_tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,35 +17,48 @@
         android:textSize="20dp" />
 
     <TextView
-        android:id="@+id/question_one"
+        android:id="@+id/two_question_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_title"
+        android:layout_below="@+id/two_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Comó te describes?"
+        android:text="¿Con que frecuencia ves peliculas?"
         android:textAlignment="center"
         android:textSize="15dp" />
+
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/two_question_one"
+        android:id="@+id/sb_movies"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:max="4"
+        />
+
+    <TextView
+        android:id="@+id/two_question_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sb_movies"
+        android:layout_marginTop="20dp"
+        android:text="¿Qué tipo de peliculas te gustan ver?"
+        android:textAlignment="center"
+        android:textSize="15dp" />
+
 
     <view
         android:id="@+id/list_me"
         class="android.support.v7.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@+id/question_one"
+        android:layout_below="@+id/two_question_two"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"></view>
-
-    <android.support.design.button.MaterialButton
-        android:id="@+id/btn_add"
-        style="@style/Base.Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_me"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Agregar"
-        android:textColor="#fff" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -57,12 +70,22 @@
         android:orientation="horizontal">
 
         <android.support.design.button.MaterialButton
+            android:id="@+id/two_back"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Anterior"
+            android:textColor="#fff"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/two_next"
             style="@style/Base.Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="Siguiente"
-            android:id="@+id/one_next"
             android:textColor="#fff" />
 
     </RelativeLayout>
@@ -78,7 +101,7 @@
         app:spb_animationDuration="100"
         app:spb_checkStateCompleted="true"
         app:spb_currentStateDescriptionColor="#000"
-        app:spb_currentStateNumber="one"
+        app:spb_currentStateNumber="two"
         app:spb_maxStateNumber="five"
         app:spb_stateBackgroundColor="#BDBDBD"
         app:spb_stateDescriptionColor="#808080"

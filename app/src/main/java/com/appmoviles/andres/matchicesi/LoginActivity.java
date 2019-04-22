@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -19,12 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appmoviles.andres.matchicesi.databinding.ActivityLoginBinding;
+import com.appmoviles.andres.matchicesi.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
 
+    private User actualUser;
+
     FirebaseAuth auth;
+    FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         tvRegister = findViewById(R.id.link_signup);
         etEmail = findViewById(R.id.input_email);
         etPassword = findViewById(R.id.input_password);
+
+        etEmail.setText("cristian.rodriguez@correo.icesi.edu.co");
+        etPassword.setText("1234567");
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,21 +74,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void load(View view) {
-        if (validate() == true ){
+        if (validate() == true) {
             animateButtonWidth();
             fadeOutTextAndSetProgressDialog();
             login();
         }
     }
 
-    private void login(){
+    private void login() {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                if(auth.getCurrentUser().isEmailVerified() == true){
-                    nextAction();
+                if (auth.getCurrentUser().isEmailVerified() == true) {
+
+                    DocumentReference docRef = firestore.collection("users").document(auth.getCurrentUser().getUid());
+                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            actualUser = documentSnapshot.toObject(User.class);
+                            nextAction();
+                        }
+                    });
+
+                    //nextAction();
                 } else {
                     Toast.makeText(LoginActivity.this, "Tu cuenta no ha sido verificada.", Toast.LENGTH_SHORT).show();
                     restoreButton();
@@ -122,12 +144,12 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void restoreButton(){
+    private void restoreButton() {
         restoreButtonWidth();
         fadeInTextAndSetProgressDialog();
     }
 
-    private void restoreButtonWidth(){
+    private void restoreButtonWidth() {
         ValueAnimator anim = ValueAnimator.ofInt(getFinalWidth(), getInitialWidth());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -201,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
         float radius = Math.max(x, y) * 1.2f;
 
         Animator reveal = ViewAnimationUtils.createCircularReveal(loginBinding.revealView, startX, startY, getFinalWidth(), radius);
-        reveal.setDuration(350);
+        reveal.setDuration(450);
         reveal.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -220,8 +242,15 @@ public class LoginActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                if (actualUser.isFirstLogin()) {
+                    Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, 100);
     }
