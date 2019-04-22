@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "299075742648",
+    "firebase_url": "https://matchicesi-3d117.firebaseio.com",
+    "project_id": "matchicesi-3d117",
+    "storage_bucket": "matchicesi-3d117.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299075742648:android:9408718889c0a1f3",
+        "android_client_info": {
+          "package_name": "com.appmoviles.andres.matchicesi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299075742648-kvet4b419rqbkba7lvpeg13rv64fnf87.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appmoviles.andres.matchicesi",
+            "certificate_hash": "a02ab717319b0605f1f9f3c0d2d78eff3f363e05"
+          }
+        },
+        {
+          "client_id": "299075742648-2o3kmnnit6svr4v9jvo95fk3ig6j53jl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2m0GsAev1Ie5KHZZ0wBSeLiMo44IM-GI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299075742648-2o3kmnnit6svr4v9jvo95fk3ig6j53jl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
