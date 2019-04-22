@@ -244,6 +244,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void run() {
                 register();
                 fadeOutProgressDialog();
+                //test
             }
         }, 100);
     }
