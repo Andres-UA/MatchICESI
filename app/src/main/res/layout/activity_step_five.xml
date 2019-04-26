@@ -1,9 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StepFiveActivity">
+    tools:context=".StepOneActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/five_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="Cuentanos un poco sobre ti"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/five_question_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/five_tv_title"
+        android:layout_marginTop="20dp"
+        android:text="¿Comó te describes?"
+        android:textAlignment="center"
+        android:textSize="15dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_fun"
+        class="android.support.v7.app.AlertController$RecycleListView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/five_question_one"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"></android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="70dp"
+        android:orientation="horizontal">
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/five_back"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Anterior"
+            android:textColor="#fff"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/five_next"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Siguiente"
+            android:textColor="#fff" />
+
+    </RelativeLayout>
+
+
+    <com.kofigyan.stateprogressbar.StateProgressBar
+        android:id="@+id/progress_step_five"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        app:spb_animateToCurrentProgressState="true"
+        app:spb_animationDuration="100"
+        app:spb_checkStateCompleted="true"
+        app:spb_currentStateDescriptionColor="#000"
+        app:spb_currentStateNumber="five"
+        app:spb_maxStateNumber="five"
+        app:spb_stateBackgroundColor="#BDBDBD"
+        app:spb_stateDescriptionColor="#808080"
+        app:spb_stateForegroundColor="@color/colorPrimary"
+        app:spb_stateNumberBackgroundColor="#808080"
+        app:spb_stateNumberForegroundColor="#eeeeee" />
+
+</RelativeLayout>

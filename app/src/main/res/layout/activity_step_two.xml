@@ -28,16 +28,15 @@
 
 
     <SeekBar
+        android:id="@+id/sb_movies"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/two_question_one"
-        android:id="@+id/sb_movies"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:max="4"
-        />
+        android:max="4" />
 
     <TextView
         android:id="@+id/two_question_two"
@@ -50,15 +49,27 @@
         android:textSize="15dp" />
 
 
-    <view
-        android:id="@+id/list_me"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_movies"
         class="android.support.v7.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:layout_below="@+id/two_question_two"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"></view>
+        android:layout_marginRight="20dp" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/two_add"
+        style="@style/Base.Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_movies"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:text="Agregar"
+        android:textColor="#fff" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -92,7 +103,7 @@
 
 
     <com.kofigyan.stateprogressbar.StateProgressBar
-        android:id="@+id/your_state_progress_bar_id"
+        android:id="@+id/progress_step_two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
