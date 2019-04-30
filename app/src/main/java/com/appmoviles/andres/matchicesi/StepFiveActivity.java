@@ -12,7 +12,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
+import com.appmoviles.andres.matchicesi.adapters.ItemMoveCallback;
 import com.appmoviles.andres.matchicesi.adapters.SpecialListAdapter;
+import com.appmoviles.andres.matchicesi.adapters.StartDragListener;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.List;
 
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 
-public class StepFiveActivity extends AppCompatActivity {
+public class StepFiveActivity extends AppCompatActivity implements StartDragListener {
 
     private String[] descriptionData = {"Tu", "Peliculas", "Musica", "Libros", "Salidas"};
 
@@ -35,6 +37,8 @@ public class StepFiveActivity extends AppCompatActivity {
 
     private MaterialButton btnBack;
     private MaterialButton btnNext;
+
+    ItemTouchHelper touchHelper;
 
 
     @Override
@@ -70,8 +74,13 @@ public class StepFiveActivity extends AppCompatActivity {
         dataset.add("Salir a comer");
         dataset.add("Salir a caminar");
 
-        funListAdapter = new SpecialListAdapter(dataset);
+        funListAdapter = new SpecialListAdapter(dataset, this);
 
+
+        ItemTouchHelper.Callback callback =
+                new ItemMoveCallback(funListAdapter);
+        touchHelper  = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(rvFunList);
 
         rvFunList.setLayoutManager(new LinearLayoutManager(this));
         rvFunList.setAdapter(funListAdapter);
@@ -103,4 +112,10 @@ public class StepFiveActivity extends AppCompatActivity {
         helper.attachToRecyclerView(rvFunList);
 
     }
+
+    @Override
+    public void requestDrag(RecyclerView.ViewHolder viewHolder) {
+        touchHelper.startDrag(viewHolder);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.appmoviles.andres.matchicesi;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -14,8 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +47,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etRePassword;
 
+    EditText etBirthDate;
+    ImageButton btnShowCalendar;
+
     private FrameLayout flRegister;
     private TextView tvRegister;
     private ProgressBar pbRegister;
@@ -50,6 +57,11 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
     FirebaseFirestore firestore;
+
+    private static final String CERO = "0";
+    private static final String BARRA = "/";
+    public final Calendar c = Calendar.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,43 @@ public class RegisterActivity extends AppCompatActivity {
         flRegister = findViewById(R.id.signInBtn);
         tvRegister = findViewById(R.id.signInTtx);
         pbRegister = findViewById(R.id.signInPB);
+
+        etBirthDate = findViewById(R.id.et_birth_date);
+
+        btnShowCalendar = findViewById(R.id.btn_show_birth_date);
+        btnShowCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                obtenerFecha();
+            }
+        });
+    }
+
+
+    private void obtenerFecha() {
+
+
+        //Variables para obtener la fecha
+        final int mes = c.get(Calendar.MONTH);
+        final int dia = c.get(Calendar.DAY_OF_MONTH);
+        final int anio = c.get(Calendar.YEAR);
+
+        DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                //Esta variable lo que realiza es aumentar en uno el mes ya que comienza desde 0 = enero
+                final int mesActual = month + 1;
+                //Formateo el día obtenido: antepone el 0 si son menores de 10
+                String diaFormateado = (dayOfMonth < 10) ? CERO + String.valueOf(dayOfMonth) : String.valueOf(dayOfMonth);
+
+                //Formateo el mes obtenido: antepone el 0 si son menores de 10
+                String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
+
+                etBirthDate.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
+            }
+
+        }, anio, mes, dia);
+        recogerFecha.show();
     }
 
     private boolean validate() {
