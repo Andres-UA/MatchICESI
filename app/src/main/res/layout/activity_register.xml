@@ -107,7 +107,9 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:entries="@array/careers"
+                android:prompt="Elije una carrera"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
