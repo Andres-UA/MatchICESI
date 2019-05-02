@@ -7,178 +7,189 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="30dp"
-            android:paddingTop="10dp"
-            android:paddingRight="30dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="¿Estás listo para conocer nuevas personas?"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
-
-                <EditText
-                    android:id="@+id/register_names"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nombres"
-                    android:inputType="textPersonName" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
-
-                <EditText
-                    android:id="@+id/register_surnames"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Apellidos"
-                    android:inputType="textPersonName" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
-
-                <EditText
-                    android:id="@+id/register_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Correo"
-                    android:inputType="textEmailAddress" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/register_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword" />
-            </android.support.design.widget.TextInputLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/et_birth_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:ems="10"
-                    android:hint="dd/mm/yyyy"
-                    android:inputType="date" />
-
-                <ImageButton
-                    android:id="@+id/btn_show_birth_date"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@mipmap/trash_icon" />
-
-            </RelativeLayout>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/careers"
-                android:prompt="Elije una carrera"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/register_re_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword" />
-            </android.support.design.widget.TextInputLayout>
-
-            <FrameLayout
-                android:id="@+id/signInBtn"
-                android:layout_width="200dp"
-                android:layout_height="46dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="0dp"
-                android:background="@drawable/btn_primary"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:foreground="?selectableItemBackground"
-                android:onClick="doRegister">
-
-                <TextView
-                    android:id="@+id/signInTtx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Registrarse"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp" />
-
-                <ProgressBar
-                    android:id="@+id/signInPB"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center"
-                    android:visibility="invisible" />
-
-            </FrameLayout>
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp"
+                android:paddingRight="30dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="¿Ya tiene cuenta?"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/link_signin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Entrar"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="¿Estás listo para conocer nuevas personas?"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/register_names"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombres"
+                        android:inputType="textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/register_surnames"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Apellidos"
+                        android:inputType="textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/register_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Correo"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/et_birth_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:ems="10"
+                        android:hint="dd/mm/yyyy"
+                        android:inputType="date" />
+
+                    <ImageButton
+                        android:id="@+id/btn_show_birth_date"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/trash_icon" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/s_career"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:entries="@array/careers_array" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/s_genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:entries="@array/genres_array" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/register_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/register_re_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Repetir Contraseña"
+                        android:inputType="textPassword" />
+                </android.support.design.widget.TextInputLayout>
+
+                <FrameLayout
+                    android:id="@+id/signInBtn"
+                    android:layout_width="200dp"
+                    android:layout_height="46dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@drawable/btn_primary"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="doRegister">
+
+                    <TextView
+                        android:id="@+id/signInTtx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Registrarse"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
+                    <ProgressBar
+                        android:id="@+id/signInPB"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Ya tiene cuenta?"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/link_signin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Entrar"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
+
 
         <View
             android:id="@+id/revealView"

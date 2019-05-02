@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,16 +47,16 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private EditText etRePassword;
+    private EditText etBirthDate;
+    private Spinner sCareer;
+    private Spinner sGenre;
 
-    EditText etBirthDate;
-    ImageButton btnShowCalendar;
-
+    private ImageButton btnShowCalendar;
     private FrameLayout flRegister;
     private TextView tvRegister;
     private ProgressBar pbRegister;
 
     FirebaseAuth auth;
-    FirebaseDatabase database;
     FirebaseFirestore firestore;
 
     private static final String CERO = "0";
@@ -69,7 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
         etNames = findViewById(R.id.register_names);
@@ -77,27 +77,26 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.register_email);
         etPassword = findViewById(R.id.register_password);
         etRePassword = findViewById(R.id.register_re_password);
+        etBirthDate = findViewById(R.id.et_birth_date);
+
+        sCareer = findViewById(R.id.s_career);
+        sGenre = findViewById(R.id.s_genre);
 
         flRegister = findViewById(R.id.signInBtn);
         tvRegister = findViewById(R.id.signInTtx);
         pbRegister = findViewById(R.id.signInPB);
 
-        etBirthDate = findViewById(R.id.et_birth_date);
-
         btnShowCalendar = findViewById(R.id.btn_show_birth_date);
         btnShowCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                obtenerFecha();
+                getDate();
             }
         });
     }
 
 
-    private void obtenerFecha() {
-
-
-        //Variables para obtener la fecha
+    private void getDate() {
         final int mes = c.get(Calendar.MONTH);
         final int dia = c.get(Calendar.DAY_OF_MONTH);
         final int anio = c.get(Calendar.YEAR);
@@ -128,9 +127,12 @@ public class RegisterActivity extends AppCompatActivity {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String rePassword = etRePassword.getText().toString();
+        String birthDate = etBirthDate.getText().toString();
+        String career = sCareer.getSelectedItem().toString();
+        String genre = sGenre.getSelectedItem().toString();
 
         // Patrón para validar el email
-        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@correo.icesi.edu.co");
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@correo.icesi.edu.co*");
         Matcher mather = pattern.matcher(email);
 
         if (names.isEmpty()) {
@@ -148,6 +150,21 @@ public class RegisterActivity extends AppCompatActivity {
             valid = false;
         } else if (mather.find() == false) {
             etEmail.setError("Este correo no es proporcionado por la universidad.");
+            valid = false;
+        }
+
+        if (birthDate.isEmpty()) {
+            etBirthDate.setError("Este campo es obligatorio.");
+            valid = false;
+        }
+
+        if (career.isEmpty() || career.equals("Carrera")) {
+            Toast.makeText(getApplicationContext(), "Debe elegir una carrera.", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+
+        if (genre.isEmpty() || genre.equals("Te identificas como")) {
+            Toast.makeText(getApplicationContext(), "Debe elegir un genero.", Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
@@ -180,14 +197,16 @@ public class RegisterActivity extends AppCompatActivity {
         final String surnames = etSurnames.getText().toString();
         final String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
+        final String birthDate = etBirthDate.getText().toString();
+        final String career = sCareer.getSelectedItem().toString();
+        final String genre = sGenre.getSelectedItem().toString();
 
 
         auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String uid = auth.getCurrentUser().getUid();
-                User user = new User(uid, names, surnames, email, true);
-                //database.getReference().child("users").child(uid).setValue(user);
+                User user = new User(uid, names, surnames, email, birthDate, career, genre, true);
 
                 firestore.collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

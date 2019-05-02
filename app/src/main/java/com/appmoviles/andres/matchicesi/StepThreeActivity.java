@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
+import com.appmoviles.andres.matchicesi.model.UserData;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -24,17 +26,27 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
     private StateProgressBar stateProgressBar;
     private SpinnerDialog spinnerDialog;
 
-    private ItemListAdapter identityListAdapter;
-    private RecyclerView rvIdentityList;
+    private SeekBar sbMusicRank;
+
+    private ItemListAdapter musicListAdapter;
+    private RecyclerView rvMusicList;
 
     private MaterialButton btnAdd;
     private MaterialButton btnBack;
     private MaterialButton btnNext;
 
+    private UserData userData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_three);
+
+        if (getIntent().getExtras().getSerializable("userData") != null) {
+            userData = (UserData) getIntent().getExtras().getSerializable("userData");
+        } else {
+            userData = new UserData();
+        }
 
         items.add("Blues");
         items.add("Country");
@@ -66,6 +78,8 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         stateProgressBar = findViewById(R.id.progress_step_three);
         stateProgressBar.setStateDescriptionData(descriptionData);
 
+        sbMusicRank = findViewById(R.id.sb_music);
+
         btnAdd = findViewById(R.id.three_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,19 +101,27 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int musicRank = sbMusicRank.getProgress();
+                ArrayList<String> musics = musicListAdapter.getData();
+
+                userData.setMusicRank(musicRank);
+                userData.setMusics(musics);
+
                 Intent intent = new Intent(StepThreeActivity.this, StepFourActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
 
-        rvIdentityList = findViewById(R.id.list_music);
+        rvMusicList = findViewById(R.id.list_music);
 
-        identityListAdapter = new ItemListAdapter();
-        identityListAdapter.setListener(this);
+        musicListAdapter = new ItemListAdapter();
+        musicListAdapter.setListener(this);
 
-        rvIdentityList.setLayoutManager(new LinearLayoutManager(this));
-        rvIdentityList.setAdapter(identityListAdapter);
-        rvIdentityList.setHasFixedSize(true);
+        rvMusicList.setLayoutManager(new LinearLayoutManager(this));
+        rvMusicList.setAdapter(musicListAdapter);
+        rvMusicList.setHasFixedSize(true);
 
         //spinnerDialog=new SpinnerDialog(StepOneActivity.this,items,"Select or Search City","Close Button Text");// With No Animation
         spinnerDialog = new SpinnerDialog(StepThreeActivity.this, items, "Selecciona o busca un genero", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
@@ -111,7 +133,7 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {
-                identityListAdapter.addItem(item);
+                musicListAdapter.addItem(item);
             }
         });
 
@@ -119,6 +141,6 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
 
     @Override
     public void onItemClick(String item) {
-        identityListAdapter.deleteItem(item);
+        musicListAdapter.deleteItem(item);
     }
 }

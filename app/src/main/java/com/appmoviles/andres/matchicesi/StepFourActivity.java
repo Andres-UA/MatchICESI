@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
+import com.appmoviles.andres.matchicesi.model.UserData;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -24,18 +26,28 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
     private StateProgressBar stateProgressBar;
     private SpinnerDialog spinnerDialog;
 
-    private ItemListAdapter identityListAdapter;
-    private RecyclerView rvIdentityList;
+    private SeekBar sbBookRank;
+
+
+    private ItemListAdapter bookListAdapter;
+    private RecyclerView rvBookList;
 
     private MaterialButton btnAdd;
     private MaterialButton btnBack;
     private MaterialButton btnNext;
 
+    private UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_four);
+
+        if (getIntent().getExtras().getSerializable("userData") != null) {
+            userData = (UserData) getIntent().getExtras().getSerializable("userData");
+        } else {
+            userData = new UserData();
+        }
 
         items.add("La novela de ciencia ficción");
         items.add("La novela gótica");
@@ -48,6 +60,8 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
 
         stateProgressBar = findViewById(R.id.progress_step_four);
         stateProgressBar.setStateDescriptionData(descriptionData);
+
+        sbBookRank = findViewById(R.id.sb_book);
 
         btnAdd = findViewById(R.id.four_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -70,19 +84,27 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int bookRank = sbBookRank.getProgress();
+                ArrayList<String> books = bookListAdapter.getData();
+
+                userData.setBookRank(bookRank);
+                userData.setBooks(books);
+
                 Intent intent = new Intent(StepFourActivity.this, StepFiveActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
 
-        rvIdentityList = findViewById(R.id.list_books);
+        rvBookList = findViewById(R.id.list_books);
 
-        identityListAdapter = new ItemListAdapter();
-        identityListAdapter.setListener(this);
+        bookListAdapter = new ItemListAdapter();
+        bookListAdapter.setListener(this);
 
-        rvIdentityList.setLayoutManager(new LinearLayoutManager(this));
-        rvIdentityList.setAdapter(identityListAdapter);
-        rvIdentityList.setHasFixedSize(true);
+        rvBookList.setLayoutManager(new LinearLayoutManager(this));
+        rvBookList.setAdapter(bookListAdapter);
+        rvBookList.setHasFixedSize(true);
 
         //spinnerDialog=new SpinnerDialog(StepOneActivity.this,items,"Select or Search City","Close Button Text");// With No Animation
         spinnerDialog = new SpinnerDialog(StepFourActivity.this, items, "Select or Search City", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
@@ -94,7 +116,7 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {
-                identityListAdapter.addItem(item);
+                bookListAdapter.addItem(item);
             }
         });
 
@@ -102,6 +124,6 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
 
     @Override
     public void onItemClick(String item) {
-        identityListAdapter.deleteItem(item);
+        bookListAdapter.deleteItem(item);
     }
 }

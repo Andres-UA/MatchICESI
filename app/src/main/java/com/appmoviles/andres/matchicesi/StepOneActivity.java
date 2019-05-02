@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
+import com.appmoviles.andres.matchicesi.model.UserData;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -35,18 +36,14 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_one);
 
-        items.add("Mumbai");
-        items.add("Delhi");
-        items.add("Bengaluru");
-        items.add("Hyderabad");
-        items.add("Ahmedabad");
-        items.add("Chennai");
-        items.add("Kolkata");
-        items.add("Surat");
-        items.add("Pune");
-        items.add("Jaipur");
-        items.add("Lucknow");
-        items.add("Kanpur");
+        items.add("Abierto");
+        items.add("Chistoso");
+        items.add("Comprensivo");
+        items.add("Extrovertido");
+        items.add("Generoso");
+        items.add("Introvertido");
+        items.add("Romántico");
+        items.add("Serio");
 
         stateProgressBar = findViewById(R.id.progress_step_one);
         stateProgressBar.setStateDescriptionData(descriptionData);
@@ -63,7 +60,10 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserData userData = new UserData();
+                userData.setDescriptors(identityListAdapter.getData());
                 Intent intent = new Intent(StepOneActivity.this, StepTwoActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
@@ -77,8 +77,7 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         rvIdentityList.setAdapter(identityListAdapter);
         rvIdentityList.setHasFixedSize(true);
 
-        //spinnerDialog=new SpinnerDialog(StepOneActivity.this,items,"Select or Search City","Close Button Text");// With No Animation
-        spinnerDialog = new SpinnerDialog(StepOneActivity.this, items, "Select or Search City", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
+        spinnerDialog = new SpinnerDialog(StepOneActivity.this, items, "Seleccione o busque un descriptor", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
 
         spinnerDialog.setCancellable(true); // for cancellable
         spinnerDialog.setShowKeyboard(false);// for open keyboard by default

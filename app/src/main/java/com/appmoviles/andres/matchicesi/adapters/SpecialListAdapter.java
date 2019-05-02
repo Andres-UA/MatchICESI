@@ -36,6 +36,10 @@ public class SpecialListAdapter extends RecyclerView.Adapter<SpecialListAdapter.
         }
     }
 
+    public ArrayList<String> getData() {
+        return data;
+    }
+
     public SpecialListAdapter(ArrayList<String> data, StartDragListener startDragListener) {
         mStartDragListener = startDragListener;
         this.data = data;

@@ -15,6 +15,7 @@ import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.adapters.ItemMoveCallback;
 import com.appmoviles.andres.matchicesi.adapters.SpecialListAdapter;
 import com.appmoviles.andres.matchicesi.adapters.StartDragListener;
+import com.appmoviles.andres.matchicesi.model.UserData;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -40,11 +41,19 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
 
     ItemTouchHelper touchHelper;
 
+    private UserData userData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_five);
+
+        if (getIntent().getExtras().getSerializable("userData") != null) {
+            userData = (UserData) getIntent().getExtras().getSerializable("userData");
+        } else {
+            userData = new UserData();
+        }
 
         stateProgressBar = findViewById(R.id.progress_step_five);
         stateProgressBar.setStateDescriptionData(descriptionData);
@@ -62,7 +71,13 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ArrayList<String> funs = funListAdapter.getData();
+
+                userData.setFuns(funs);
+
                 Intent intent = new Intent(StepFiveActivity.this, FinishActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
@@ -79,7 +94,7 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
 
         ItemTouchHelper.Callback callback =
                 new ItemMoveCallback(funListAdapter);
-        touchHelper  = new ItemTouchHelper(callback);
+        touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(rvFunList);
 
         rvFunList.setLayoutManager(new LinearLayoutManager(this));
