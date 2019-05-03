@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private UserFragment userFragment;
     private HomeFragment homeFragment;
     private MatchFragment matchFragment;
+    private ChatFragment chatFragment;
+    private NotificationsFragment notificationsFragment;
 
     FirebaseAuth auth;
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         userFragment = new UserFragment();
         homeFragment = new HomeFragment();
         matchFragment = new MatchFragment();
+        chatFragment = new ChatFragment();
+        notificationsFragment = new NotificationsFragment();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -76,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "PERFIL":
                         transaction.replace(R.id.main_content, userFragment);
+                        break;
+                    case "NOTIFICACIONES":
+                        transaction.replace(R.id.main_content, notificationsFragment);
+                        break;
+                    case "CHATS":
+                        transaction.replace(R.id.main_content, chatFragment);
                         break;
                 }
                 //transaction.addToBackStack(null);
