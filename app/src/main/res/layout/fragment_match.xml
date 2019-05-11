@@ -8,11 +8,9 @@
 
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/card_stack_view"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="400dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_gravity="center"
         android:clipToPadding="false"
         android:padding="4dp"></com.yuyakaido.android.cardstackview.CardStackView>
 
