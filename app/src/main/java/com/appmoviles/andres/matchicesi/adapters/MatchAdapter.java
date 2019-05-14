@@ -43,6 +43,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public Match getMatch(int index) {
+        return data.get(index);
+    }
+
     public void setMatches(ArrayList<Match> matches) {
         data = matches;
     }

@@ -6,12 +6,23 @@
     android:background="#FFFF"
     tools:context=".MatchFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+
+    </RelativeLayout>
+
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/card_stack_view"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:clipToPadding="false"
-        android:padding="4dp"></com.yuyakaido.android.cardstackview.CardStackView>
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="50dp"></com.yuyakaido.android.cardstackview.CardStackView>
 
 </FrameLayout>
