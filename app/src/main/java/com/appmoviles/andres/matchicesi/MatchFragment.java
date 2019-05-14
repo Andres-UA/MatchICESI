@@ -92,11 +92,11 @@ public class MatchFragment extends Fragment implements CardStackListener {
 
     @Override
     public void onCardAppeared(View view, int position) {
-        Log.e(">>>", "onCardDisappeared: > " + position);
+        //Log.e(">>>", "onCardDisappeared: > " + position);
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
-        Log.e(">>>", "onCardDisappeared: > " + position);
+        //Log.e(">>>", "onCardDisappeared: > " + position);
     }
 }
