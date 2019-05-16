@@ -88,7 +88,7 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
                 int bookRank = sbBookRank.getProgress();
                 ArrayList<String> books = bookListAdapter.getData();
 
-                userData.setBookRank(bookRank);
+                userData.setBookRank(bookRank+1);
                 userData.setBooks(books);
 
                 Intent intent = new Intent(StepFourActivity.this, StepFiveActivity.class);

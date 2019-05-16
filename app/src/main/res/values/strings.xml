@@ -3,14 +3,34 @@
 
     <string-array name="careers_array">
         <item>Carrera</item>
+        <item>Diseño industrial</item>
+        <item>Diseño de medios interactivos</item>
         <item>Ingenieria de sistemas</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+        <item>Ingenieria telematica</item>
+        <item>Ingenieria industrial</item>
+        <item>Ingenieria biomedica</item>
+        <item>Administracion de empresas con enfasis en negocios internacionales</item>
+        <item>Contaduria publica y finanzas internacionales</item>
+        <item>Economia</item>
+        <item>Mercadeo internacional y publicidad</item>
+        <item>Economia y negocios internacionales</item>
+        <item>Finanzas</item>
+        <item>Antropologia</item>
+        <item>Ciencia politica con enfasis en relaciones internacionales</item>
+        <item>Derecho</item>
+        <item>Psicologia</item>
+        <item>Musica</item>
+        <item>Sociologia</item>
+        <item>Biologia con concentraciones en conservacion y biologia molecular/biotecnologia</item>
+        <item>Quimica con enfasis en bioquimica</item>
+        <item>Quimica farmaceutica</item>
+        <item>Medicina</item>
+        <item>Licenciatura en educacion basica primaria</item>
+        <item>Licenciatura en literatura y lengua castellana</item>
+        <item>Licenciatura en artes con enfasis en tecnologias para la creacion</item>
+        <item>Licenciatura en lenguas extranjeras con enfasis en ingles</item>
+        <item>Licenciatura en ciencias naturales</item>
+        <item>Licenciatura en ciencias sociales</item>
     </string-array>
 
     <string-array name="genres_array">

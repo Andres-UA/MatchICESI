@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatFragment"
-    android:background="#FFF">
+    android:background="#FFF"
+    tools:context=".ChatFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +21,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Amigos" />
+                android:text="Amigos"
+                android:textSize="20dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_friends_list"

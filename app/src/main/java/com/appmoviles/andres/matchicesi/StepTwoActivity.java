@@ -90,7 +90,7 @@ public class StepTwoActivity extends AppCompatActivity implements ItemListAdapte
                 int movieRank = sbMovieRank.getProgress();
                 ArrayList<String> movies = movieListAdapter.getData();
 
-                userData.setBookRank(movieRank);
+                userData.setMovieRank(movieRank+1);
                 userData.setMovies(movies);
 
                 Intent intent = new Intent(StepTwoActivity.this, StepThreeActivity.class);

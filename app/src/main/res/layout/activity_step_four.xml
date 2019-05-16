@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:text="Cuentanos un poco sobre ti"
+        android:text="Cuéntanos un poco sobre ti"
         android:textAlignment="center"
         android:textSize="20dp" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/four_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Comó te describes?"
+        android:text="¿Con qué frecuencia lees libros?"
         android:textAlignment="center"
         android:textSize="15dp" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sb_book"
         android:layout_marginTop="20dp"
-        android:text="¿Qué tipo de peliculas te gustan ver?"
+        android:text="¿Qué tipo de libros te gusta leer?"
         android:textAlignment="center"
         android:textSize="15dp" />
 

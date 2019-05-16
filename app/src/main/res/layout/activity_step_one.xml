@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:text="Cuentanos un poco sobre ti"
+        android:text="Cuéntanos un poco sobre ti"
         android:textAlignment="center"
         android:textSize="20dp" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/one_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Comó te describes?"
+        android:text="¿Cómo te describes?"
         android:textAlignment="center"
         android:textSize="15dp" />
 

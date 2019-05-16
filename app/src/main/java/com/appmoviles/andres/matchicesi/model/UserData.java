@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class UserData implements Serializable {
 
+    private String id;
     private ArrayList<String> descriptors;
     private int movieRank;
     private ArrayList<String> movies;
@@ -17,7 +18,8 @@ public class UserData implements Serializable {
     public UserData() {
     }
 
-    public UserData(ArrayList<String> descriptors, int movieRank, ArrayList<String> movies, int musicRank, ArrayList<String> musics, int bookRank, ArrayList<String> books, ArrayList<String> funs) {
+    public UserData(String id, ArrayList<String> descriptors, int movieRank, ArrayList<String> movies, int musicRank, ArrayList<String> musics, int bookRank, ArrayList<String> books, ArrayList<String> funs) {
+        this.id = id;
         this.descriptors = descriptors;
         this.movieRank = movieRank;
         this.movies = movies;
@@ -26,6 +28,14 @@ public class UserData implements Serializable {
         this.bookRank = bookRank;
         this.books = books;
         this.funs = funs;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ArrayList<String> getDescriptors() {

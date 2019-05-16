@@ -2,19 +2,28 @@ package com.appmoviles.andres.matchicesi.model;
 
 public class Match {
 
+    private String id;
     private String name;
     private String image;
-    private String age;
+    private int age;
 
     public Match() {
     }
 
-    public Match(String name, String image, String age) {
+    public Match(String id, String name, String image, int age) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.age = age;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -32,11 +41,11 @@ public class Match {
         this.image = image;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 }

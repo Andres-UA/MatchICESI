@@ -1,6 +1,8 @@
 package com.appmoviles.andres.matchicesi;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,13 +13,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.appmoviles.andres.matchicesi.util.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 import com.luseen.spacenavigation.SpaceOnLongClickListener;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final int CAMERA_CALLBACK_ID = 100;
+    private static final int GALLERY_CALLBACK_ID = 101;
+    private File photoFile;
 
     private MaterialButton btnLogout;
     private SpaceNavigationView spaceNavigationView;
@@ -54,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
         spaceNavigationView.addSpaceItem(new SpaceItem("CHATS", R.drawable.chat_icon));
         spaceNavigationView.addSpaceItem(new SpaceItem("NOTIFICACIONES", R.drawable.notification_icon));
         spaceNavigationView.addSpaceItem(new SpaceItem("PERFIL", R.drawable.profile_icon));
+
+        FragmentManager manager1 = getSupportFragmentManager();
+        FragmentTransaction transaction1 = manager1.beginTransaction();
+        transaction1.replace(R.id.main_content, matchFragment);
+        transaction1.commit();
 
         spaceNavigationView.showIconOnly();
 
@@ -94,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemReselected(int itemIndex, String itemName) {
-                Toast.makeText(MainActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,6 +129,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         spaceNavigationView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Luego de tomar la foto y guardarla
+        if (requestCode == CAMERA_CALLBACK_ID && resultCode == RESULT_OK) {
+            //subirImagen();
+        }
+        if (requestCode == GALLERY_CALLBACK_ID && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            photoFile = new File(Util.getPath(this, uri));
+            //subirImagen();
+        }
     }
 
 }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:text="Cuentanos un poco sobre ti"
+        android:text="Cuéntanos un poco sobre ti"
         android:textAlignment="center"
         android:textSize="20dp" />
 
@@ -22,7 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/five_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Comó te describes?"
+        android:text="Ordena las activivades"
+        android:textAlignment="center"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/five_question_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/five_question_one"
+        android:layout_marginTop="20dp"
+        android:text="La que este más arriba es la que más te gusta"
         android:textAlignment="center"
         android:textSize="15dp" />
 
@@ -31,7 +41,7 @@
         class="android.support.v7.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@+id/five_question_one"
+        android:layout_below="@+id/five_question_two"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"></android.support.v7.widget.RecyclerView>

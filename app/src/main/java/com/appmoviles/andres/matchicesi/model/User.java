@@ -8,15 +8,17 @@ public class User {
     private String names;
     private String surnames;
     private String email;
-    private String birthDate;
+    private Date birthDate;
     private String career;
     private String genre;
     private boolean firstLogin;
+    private String profilePic;
+    private String description;
 
     public User() {
     }
 
-    public User(String id, String names, String surnames, String email, String birthDate, String career, String genre, boolean firstLogin) {
+    public User(String id, String names, String surnames, String email, Date birthDate, String career, String genre, boolean firstLogin, String profilePic, String description) {
         this.id = id;
         this.names = names;
         this.surnames = surnames;
@@ -25,6 +27,8 @@ public class User {
         this.career = career;
         this.genre = genre;
         this.firstLogin = firstLogin;
+        this.profilePic = profilePic;
+        this.description = description;
     }
 
     public String getId() {
@@ -59,11 +63,11 @@ public class User {
         this.email = email;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -89,5 +93,21 @@ public class User {
 
     public void setFirstLogin(boolean firstLogin) {
         this.firstLogin = firstLogin;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -105,7 +105,7 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
                 int musicRank = sbMusicRank.getProgress();
                 ArrayList<String> musics = musicListAdapter.getData();
 
-                userData.setMusicRank(musicRank);
+                userData.setMusicRank(musicRank+1);
                 userData.setMusics(musics);
 
                 Intent intent = new Intent(StepThreeActivity.this, StepFourActivity.class);

@@ -36,7 +36,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -200,13 +203,21 @@ public class RegisterActivity extends AppCompatActivity {
         final String birthDate = etBirthDate.getText().toString();
         final String career = sCareer.getSelectedItem().toString();
         final String genre = sGenre.getSelectedItem().toString();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            date = sdf.parse(birthDate);
+        } catch (ParseException ex) {
+            Log.v("Exception", ex.getLocalizedMessage());
+        }
+        final Date newBirthDate = date;
 
 
         auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String uid = auth.getCurrentUser().getUid();
-                User user = new User(uid, names, surnames, email, birthDate, career, genre, true);
+                User user = new User(uid, names, surnames, email, newBirthDate, career, genre, true, "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png","");
 
                 firestore.collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

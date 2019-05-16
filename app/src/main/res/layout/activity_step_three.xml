@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:text="Cuentanos un poco sobre ti"
+        android:text="Cuéntanos un poco sobre ti"
         android:textAlignment="center"
         android:textSize="20dp" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/three_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Con que frecuencia escuchas musica?"
+        android:text="¿Con qué frecuencia escuchas música?"
         android:textAlignment="center"
         android:textSize="15dp" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sb_music"
         android:layout_marginTop="20dp"
-        android:text="¿Qué clase de musica te gusta?"
+        android:text="¿Qué clase de música te gusta?"
         android:textAlignment="center"
         android:textSize="15dp" />
 

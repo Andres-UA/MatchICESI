@@ -6,29 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Listo!"
-        android:layout_alignParentTop="true"
-        android:textSize="20dp"
-        android:layout_marginTop="40dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/tv_welcome"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_welcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:text="Para terminar"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Agrega una foto de perfil"
+                android:textAlignment="center"
+                android:textSize="18dp" />
+
+
+            <ImageView
+                android:id="@+id/main_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/open_cam"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Tomar" />
+
+                <Button
+                    android:id="@+id/open_gall"
+                    style="@style/Base.Widget.AppCompat.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Galeria" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Y agrega una pequeña descripción que te identifique"
+                android:textAlignment="center"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|textMultiLine" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <android.support.design.button.MaterialButton
+        android:id="@+id/btn_begin"
+        style="@style/Base.Widget.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Terminar"
-        android:textColor="#fff"
-        style="@style/Base.Widget.AppCompat.Button"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginBottom="40dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/btn_begin"
-        />
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="40dp"
+        android:text="Terminar"
+        android:textColor="#fff" />
 
 
 </RelativeLayout>

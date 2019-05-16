@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:text="Cuentanos un poco sobre ti"
+        android:text="Cuéntanos un poco sobre ti"
         android:textAlignment="center"
         android:textSize="20dp" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/two_tv_title"
         android:layout_marginTop="20dp"
-        android:text="¿Con que frecuencia ves peliculas?"
+        android:text="¿Con qué frecuencia ves películas?"
         android:textAlignment="center"
         android:textSize="15dp" />
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sb_movies"
         android:layout_marginTop="20dp"
-        android:text="¿Qué tipo de peliculas te gustan ver?"
+        android:text="¿Qué tipo de películas te gustan ver?"
         android:textAlignment="center"
         android:textSize="15dp" />
 

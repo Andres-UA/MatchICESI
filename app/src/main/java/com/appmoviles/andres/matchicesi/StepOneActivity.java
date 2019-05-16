@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.util.ArrayList;
@@ -31,10 +32,14 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
     private MaterialButton btnAdd;
     private MaterialButton btnNext;
 
+    FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_one);
+
+        auth = FirebaseAuth.getInstance();
 
         items.add("Abierto");
         items.add("Chistoso");
@@ -61,6 +66,7 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
             @Override
             public void onClick(View v) {
                 UserData userData = new UserData();
+                userData.setId(auth.getCurrentUser().getUid());
                 userData.setDescriptors(identityListAdapter.getData());
                 Intent intent = new Intent(StepOneActivity.this, StepTwoActivity.class);
                 intent.putExtra("userData", userData);
