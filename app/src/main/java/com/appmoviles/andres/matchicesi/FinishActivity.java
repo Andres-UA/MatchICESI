@@ -2,9 +2,11 @@ package com.appmoviles.andres.matchicesi;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
@@ -31,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,7 +54,7 @@ public class FinishActivity extends AppCompatActivity {
     private Button btn_open_gal;
 
     FirebaseAuth auth;
-    FirebaseFirestore firestore;
+    FirebaseFirestore store;
     FirebaseStorage storage;
 
     private UserData userData;
@@ -62,7 +65,7 @@ public class FinishActivity extends AppCompatActivity {
         setContentView(R.layout.activity_finish);
 
         auth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        store = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
         description = findViewById(R.id.description);
@@ -89,14 +92,14 @@ public class FinishActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String uid = auth.getCurrentUser().getUid();
 
-                firestore.collection("user_data").document(uid).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                store.collection("user_data").document(uid).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        firestore.collection("users").document(uid).update("firstLogin", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        store.collection("users").document(uid).update("firstLogin", false).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
 
-                                firestore.collection("users").document(uid).update("description", description.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                store.collection("users").document(uid).update("description", description.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Intent intent = new Intent(FinishActivity.this, MainActivity.class);
@@ -139,40 +142,55 @@ public class FinishActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //Luego de tomar la foto y guardarla
         if (requestCode == CAMERA_CALLBACK_ID && resultCode == RESULT_OK) {
-            subirImagen();
+            cropImage();
         }
         if (requestCode == GALLERY_CALLBACK_ID && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             photoFile = new File(Util.getPath(this, uri));
-            subirImagen();
+            cropImage();
         }
-    }
-
-    private void subirImagen() {
-        try {
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            Uri resultUri = UCrop.getOutput(data);
             StorageReference ref = storage.getReference().child("profiles").child(auth.getCurrentUser().getUid());
-            FileInputStream fis = new FileInputStream(photoFile);
-            ref.putStream(fis).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    cargarFotoPerfil();
-                }
-            });
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+
+            try {
+                FileInputStream fis = new FileInputStream(new File(Util.getPath(this, resultUri)));
+                ref.putStream(fis).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        loadImage();
+                    }
+                });
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            //final Throwable cropError = UCrop.getError(data);
         }
     }
 
-    private void cargarFotoPerfil() {
+    private void cropImage() {
+        Uri uri = FileProvider.getUriForFile(FinishActivity.this, getPackageName(), photoFile);
+        String destinationFileName = UUID.randomUUID().toString();
+
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
+        uCrop.withAspectRatio(1, 1);
+
+        UCrop.Options options = new UCrop.Options();
+        options.setToolbarWidgetColor(Color.parseColor("#E21662"));
+
+        uCrop.withOptions(options);
+        uCrop.start(FinishActivity.this);
+    }
+
+    private void loadImage() {
         StorageReference ref = storage.getReference().child("profiles").child(auth.getCurrentUser().getUid());
         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.e(">>>","uri: "+uri.toString());
-                Glide.with(FinishActivity.this).load(uri.toString()).into(img_principal);
-                firestore.collection("users").document(auth.getCurrentUser().getUid()).update("profilePic", uri.toString());
+                Glide.with(FinishActivity.this).load(uri).into(img_principal);
+                store.collection("users").document(auth.getCurrentUser().getUid()).update("profilePic", uri.toString());
             }
         });
     }

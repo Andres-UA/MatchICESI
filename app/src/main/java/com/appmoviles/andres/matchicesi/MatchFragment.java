@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.RelativeLayout;
 
 import com.appmoviles.andres.matchicesi.adapters.MatchAdapter;
 import com.appmoviles.andres.matchicesi.model.Friend;
@@ -47,9 +48,10 @@ import java.util.GregorianCalendar;
 
 public class MatchFragment extends Fragment implements CardStackListener {
 
+    private RelativeLayout layout;
     private CardStackView cardStackView;
-    CardStackLayoutManager manager;
-    MatchAdapter adapter;
+    private CardStackLayoutManager manager;
+    private MatchAdapter adapter;
 
     FirebaseAuth auth;
     FirebaseFirestore store;
@@ -75,6 +77,7 @@ public class MatchFragment extends Fragment implements CardStackListener {
 
 
         cardStackView = view.findViewById(R.id.card_stack_view);
+        layout = view.findViewById(R.id.layout_match);
 
         adapter = new MatchAdapter();
         manager = new CardStackLayoutManager(getActivity(), this);
@@ -169,6 +172,8 @@ public class MatchFragment extends Fragment implements CardStackListener {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
+                                                boolean empty = true;
+
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     UserData userData = document.toObject(UserData.class);
 
@@ -193,7 +198,11 @@ public class MatchFragment extends Fragment implements CardStackListener {
 
                                                             }
                                                         });
+                                                        empty = false;
                                                     }
+                                                }
+                                                if (empty) {
+                                                    layout.setVisibility(View.VISIBLE);
                                                 }
                                             } else {
                                                 Log.e(">>>", "Error getting documents: ", task.getException());

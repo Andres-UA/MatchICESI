@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:centre_button_color="#fff"
-        app:centre_button_icon="@mipmap/trash_icon"
+        app:centre_button_icon="@drawable/match_icon"
         app:inactive_item_color="#fff"
         app:space_background_color="@color/colorPrimary" />
 

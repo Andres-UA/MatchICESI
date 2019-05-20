@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationsFragment">
+    android:background="#FFF"
+    tools:context=".ConfigFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,19 +16,21 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Notificaciones"
+                android:text="Solicitudes"
                 android:textSize="20dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_request_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="90dp">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>

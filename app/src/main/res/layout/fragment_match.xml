@@ -7,9 +7,32 @@
     tools:context=".MatchFragment">
 
     <RelativeLayout
+        android:id="@+id/layout_match"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false">
+        android:clipChildren="false"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/txt_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:text="No hay nuevas sugerencias para ti en este momento"
+            android:textAlignment="center"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_info"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/match_not_found_image" />
 
     </RelativeLayout>
 
@@ -19,8 +42,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:clipToPadding="false"
-        android:paddingTop="5dp"
         android:paddingLeft="10dp"
+        android:paddingTop="5dp"
         android:paddingRight="10dp"
         android:paddingBottom="50dp"></com.yuyakaido.android.cardstackview.CardStackView>
 
