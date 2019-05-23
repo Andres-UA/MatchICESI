@@ -1,12 +1,8 @@
 package com.appmoviles.andres.matchicesi;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,16 +12,12 @@ import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 
 import com.appmoviles.andres.matchicesi.adapters.MatchAdapter;
-import com.appmoviles.andres.matchicesi.model.Friend;
 import com.appmoviles.andres.matchicesi.model.Friendship;
 import com.appmoviles.andres.matchicesi.model.Match;
 import com.appmoviles.andres.matchicesi.model.MatchData;
-import com.appmoviles.andres.matchicesi.model.Request;
 import com.appmoviles.andres.matchicesi.model.User;
 import com.appmoviles.andres.matchicesi.model.UserData;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,39 +106,39 @@ public class MatchFragment extends Fragment implements CardStackListener {
         return years;
     }
 
-    private void getMatches() {
-        final ArrayList<Match> matches = new ArrayList<>();
-        store.collection("matches").whereEqualTo("user_one", auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        final String user_two_id = document.get("user_two").toString();
-                        store.collection("users").document(user_two_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        User user = document.toObject(User.class);
-                                        GregorianCalendar calendar = new GregorianCalendar();
-                                        calendar.setTime(user.getBirthDate());
-                                        int age = age(calendar);
-
-                                        Match match = new Match(user.getId(), user.getNames(), user.getProfilePic(), age);
-                                        matches.add(match);
-                                    }
-                                }
-                                adapter.setMatches(matches);
-                            }
-                        });
-                    }
-                } else {
-                    Log.e(">>>", "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
+//    private void getMatches() {
+//        final ArrayList<Match> matches = new ArrayList<>();
+//        store.collection("matches").whereEqualTo("user_one", auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        final String user_two_id = document.get("user_two").toString();
+//                        store.collection("users").document(user_two_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    DocumentSnapshot document = task.getResult();
+//                                    if (document.exists()) {
+//                                        User user = document.toObject(User.class);
+//                                        GregorianCalendar calendar = new GregorianCalendar();
+//                                        calendar.setTime(user.getBirthDate());
+//                                        int age = age(calendar);
+//
+//                                        Match match = new Match(user.getId(), user.getNames(), user.getProfilePic(), age);
+//                                        matches.add(match);
+//                                    }
+//                                }
+//                                adapter.setMatches(matches);
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Log.e(">>>", "Error getting documents: ", task.getException());
+//                }
+//            }
+//        });
+//    }
 
     private void doMatches() {
         store.collection("user_data").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

@@ -1,6 +1,5 @@
 package com.appmoviles.andres.matchicesi.adapters;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,12 +8,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appmoviles.andres.matchicesi.FinishActivity;
-import com.appmoviles.andres.matchicesi.MainActivity;
 import com.appmoviles.andres.matchicesi.R;
-import com.appmoviles.andres.matchicesi.model.Friend;
 import com.appmoviles.andres.matchicesi.model.Friendship;
-import com.appmoviles.andres.matchicesi.model.Request;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -81,7 +76,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.CustomVi
                 storage.collection("friendship").document(data.get(position).getId()).update("state", "FRIENDSHIP").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // Eliminar
+                        data.remove(data.get(position));
+                        notifyDataSetChanged();
                     }
                 });
             }
@@ -93,7 +89,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.CustomVi
                 storage.collection("friendship").document(data.get(position).getId()).update("state", "CANCEL").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // Eliminar
+                        data.remove(data.get(position));
+                        notifyDataSetChanged();
                     }
                 });
             }

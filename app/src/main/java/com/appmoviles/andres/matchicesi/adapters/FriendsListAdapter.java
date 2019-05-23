@@ -6,18 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.ChatActivity;
 import com.appmoviles.andres.matchicesi.R;
-import com.appmoviles.andres.matchicesi.model.Friend;
 import com.appmoviles.andres.matchicesi.model.Friendship;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -77,6 +79,8 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         ((TextView) holder.root.findViewById(R.id.friend_item_list_name)).setText(document.get("names").toString());
+
+                        Glide.with(holder.root.getContext()).load(document.get("profilePic").toString()).into((ImageView) holder.root.findViewById(R.id.img_friend));
                     }
                 }
             }

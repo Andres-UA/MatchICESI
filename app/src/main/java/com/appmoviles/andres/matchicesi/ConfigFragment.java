@@ -1,7 +1,9 @@
 package com.appmoviles.andres.matchicesi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +25,8 @@ public class ConfigFragment extends Fragment {
     FirebaseFirestore store;
     FirebaseAuth auth;
 
+    MaterialButton btnLogout;
+
     public ConfigFragment() {
         // Required empty public constructor
     }
@@ -41,6 +45,17 @@ public class ConfigFragment extends Fragment {
         store = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        btnLogout = view.findViewById(R.id.btn_logout);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         return view;
     }

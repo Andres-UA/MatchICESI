@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.appmoviles.andres.matchicesi.adapters.FriendsListAdapter;
 import com.appmoviles.andres.matchicesi.adapters.RequestAdapter;
@@ -25,6 +27,9 @@ public class NotificationsFragment extends Fragment {
 
     private RecyclerView rvRequestList;
     private RequestAdapter requestAdapter;
+
+    private RelativeLayout layout;
+    private ScrollView layoutNotifications;
 
     FirebaseFirestore store;
     FirebaseAuth auth;
@@ -48,6 +53,9 @@ public class NotificationsFragment extends Fragment {
         store = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        layout = view.findViewById(R.id.layout_not_notification);
+        layoutNotifications = view.findViewById(R.id.layout_notification);
+
         rvRequestList = view.findViewById(R.id.rv_request_list);
         requestAdapter = new RequestAdapter();
 
@@ -62,11 +70,17 @@ public class NotificationsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            boolean empty = true;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Friendship friendship = document.toObject(Friendship.class);
                                 if (friendship.getState().equals("REQUEST")) {
                                     requestAdapter.addRequest(friendship);
+                                    empty = false;
                                 }
+                            }
+                            if (empty) {
+                                layoutNotifications.setVisibility(View.INVISIBLE);
+                                layout.setVisibility(View.VISIBLE);
                             }
                         }
                     }

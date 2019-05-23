@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
 
     private User actualUser;
+    private TextView tvRecovery;
 
     FirebaseAuth auth;
     FirebaseFirestore firestore;
@@ -60,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.input_email);
         etPassword = findViewById(R.id.input_password);
 
+        tvRecovery = findViewById(R.id.link_recovery_password);
+
         etEmail.setText("cristian.rodriguez@correo.icesi.edu.co");
         etPassword.setText("1234567");
 
@@ -67,6 +70,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        tvRecovery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RecoveryPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }

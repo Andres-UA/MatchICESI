@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appmoviles.andres.matchicesi.adapters.FriendsListAdapter;
+import com.appmoviles.andres.matchicesi.adapters.GalleryAdapter;
+import com.appmoviles.andres.matchicesi.model.Match;
+import com.appmoviles.andres.matchicesi.model.Photo;
 import com.appmoviles.andres.matchicesi.model.User;
+import com.appmoviles.andres.matchicesi.util.DateUtils;
 import com.appmoviles.andres.matchicesi.util.Util;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +36,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -39,6 +48,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
@@ -48,18 +58,20 @@ public class UserFragment extends Fragment {
 
     private static final int CAMERA_CALLBACK_ID = 100;
     private static final int GALLERY_CALLBACK_ID = 101;
+    private static final int GALLERY_ADD_CALLBACK_ID = 102;
 
     private ImageView img_principal;
     private File photoFile;
     private TextView edit_nom_edad;
     private ArrayList<ImageView> imagenes;
-    private Button btn_editar_photos;
-    private EditText edit_sobre_ti;
+    private Button btnAddPhoto;
+    private TextView edit_sobre_ti;
 
     private ImageView btnCamera;
     private ImageView btnGallery;
 
-    MaterialButton btnLogout;
+    private RecyclerView rvGallery;
+    private GalleryAdapter galleryAdapter;
 
     FirebaseAuth auth;
     FirebaseFirestore store;
@@ -77,18 +89,6 @@ public class UserFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public int age(Calendar birthDate) {
-        Calendar actualDate = Calendar.getInstance();
-        int years = actualDate.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-        int months = actualDate.get(Calendar.MONTH) - birthDate.get(Calendar.MONTH);
-        int days = actualDate.get(Calendar.DAY_OF_MONTH) - birthDate.get(Calendar.DAY_OF_MONTH);
-
-        if (months < 0 || (months == 0 && days < 0)) {
-            years--;
-        }
-        return years;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,13 +98,20 @@ public class UserFragment extends Fragment {
         store = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        rvGallery = view.findViewById(R.id.rv_gallery);
+        galleryAdapter = new GalleryAdapter();
+
+        rvGallery.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        rvGallery.setAdapter(galleryAdapter);
+        rvGallery.setHasFixedSize(true);
+
         btnCamera = view.findViewById(R.id.btn_camera);
         btnGallery = view.findViewById(R.id.btn_gallery);
 
         edit_sobre_ti = view.findViewById(R.id.edit_sobre_ti);
         edit_nom_edad = view.findViewById(R.id.edit_nom_edad);
         img_principal = view.findViewById(R.id.image_principal);
-        btnLogout = view.findViewById(R.id.btn_logout);
+
 
         store.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -115,7 +122,7 @@ public class UserFragment extends Fragment {
                         User user = document.toObject(User.class);
                         GregorianCalendar calendar = new GregorianCalendar();
                         calendar.setTime(user.getBirthDate());
-                        int age = age(calendar);
+                        int age = DateUtils.age(calendar);
                         String names = user.getNames() + ", " + age;
 
                         edit_nom_edad.setText(names);
@@ -128,7 +135,17 @@ public class UserFragment extends Fragment {
         });
 
         imagenes = new ArrayList<>();
-        btn_editar_photos = view.findViewById(R.id.btn_edit_photos);
+        btnAddPhoto = view.findViewById(R.id.btn_edit_photos);
+
+        btnAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setAction(Intent.ACTION_GET_CONTENT);
+                i.setType("image/*");
+                getActivity().startActivityForResult(i, GALLERY_ADD_CALLBACK_ID);
+            }
+        });
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,44 +168,32 @@ public class UserFragment extends Fragment {
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+
+        store.collection("photos").whereEqualTo("userId", auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onClick(View v) {
-                auth.signOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<Photo> photos = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Photo photo = document.toObject(Photo.class);
+                        photos.add(photo);
+                    }
+                    Collections.sort(photos);
+                    for (Photo photo : photos) {
+                        galleryAdapter.addPhoto(photo);
+                    }
+                }
             }
         });
 
         return view;
     }
 
-
-    private void cropImage() {
-        Uri uri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photoFile);
-        String destinationFileName = UUID.randomUUID().toString();
-
-        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getActivity().getCacheDir(), destinationFileName)));
-        uCrop.withAspectRatio(1, 1);
-
-        UCrop.Options options = new UCrop.Options();
-        options.setToolbarWidgetColor(Color.parseColor("#E21662"));
-
-        uCrop.withOptions(options);
-        uCrop.start(getActivity());
-
+    public File getPhotoFile() {
+        return photoFile;
     }
 
-    private void loadImage() {
-        StorageReference ref = storage.getReference().child("profiles").child(auth.getCurrentUser().getUid());
-        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getActivity()).load(uri.toString()).into(img_principal);
-
-                store.collection("users").document(auth.getCurrentUser().getUid()).update("profilePic", uri.toString());
-            }
-        });
+    public void addPhoto(Photo photo) {
+        galleryAdapter.addPhoto(photo);
     }
 }

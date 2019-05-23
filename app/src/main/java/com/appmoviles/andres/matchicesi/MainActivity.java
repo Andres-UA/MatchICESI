@@ -10,6 +10,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.appmoviles.andres.matchicesi.model.Photo;
 import com.appmoviles.andres.matchicesi.util.Util;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_CALLBACK_ID = 100;
     private static final int GALLERY_CALLBACK_ID = 101;
+    private static final int GALLERY_ADD_CALLBACK_ID = 102;
+
+    private String mode = "PROFILE";
 
     private SpaceNavigationView spaceNavigationView;
 
@@ -120,28 +124,55 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         userFragment.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_CALLBACK_ID && resultCode == RESULT_OK) {
+            photoFile = userFragment.getPhotoFile();
+            mode = "PROFILE";
             cropImage();
         }
         if (requestCode == GALLERY_CALLBACK_ID && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             photoFile = new File(Util.getPath(this, uri));
+            mode = "PROFILE";
+            cropImage();
+        }
+        if (requestCode == GALLERY_ADD_CALLBACK_ID && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            photoFile = new File(Util.getPath(this, uri));
+            mode = "GALLERY";
             cropImage();
         }
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             Uri resultUri = UCrop.getOutput(data);
-            StorageReference ref = storage.getReference().child("profiles").child(auth.getCurrentUser().getUid());
 
-            try {
-                FileInputStream fis = new FileInputStream(new File(Util.getPath(this, resultUri)));
-                ref.putStream(fis).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        loadImage();
-                    }
-                });
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            if (mode.equals("PROFILE")) {
+                StorageReference ref = storage.getReference().child("profiles").child(auth.getCurrentUser().getUid());
+                try {
+                    FileInputStream fis = new FileInputStream(new File(Util.getPath(this, resultUri)));
+                    ref.putStream(fis).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            loadImage();
+                        }
+                    });
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final String uid = UUID.randomUUID().toString();
+                StorageReference ref = storage.getReference().child("gallery").child(auth.getCurrentUser().getUid()).child(uid);
+                try {
+                    FileInputStream fis = new FileInputStream(new File(Util.getPath(this, resultUri)));
+                    ref.putStream(fis).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            loadImageGallery(uid);
+                        }
+                    });
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
+
+
         } else if (resultCode == UCrop.RESULT_ERROR) {
             //final Throwable cropError = UCrop.getError(data);
         }
@@ -167,8 +198,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 userFragment.setImage(uri.toString());
-
                 store.collection("users").document(auth.getCurrentUser().getUid()).update("profilePic", uri.toString());
+            }
+        });
+    }
+
+    private void loadImageGallery(final String uid) {
+        StorageReference ref = storage.getReference().child("gallery").child(auth.getCurrentUser().getUid()).child(uid);
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Photo photo = new Photo(uid, auth.getCurrentUser().getUid(), uri.toString());
+                userFragment.addPhoto(photo);
+                store.collection("photos").document(uid).set(photo);
             }
         });
     }

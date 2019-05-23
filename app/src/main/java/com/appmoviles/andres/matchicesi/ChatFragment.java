@@ -1,7 +1,5 @@
 package com.appmoviles.andres.matchicesi;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appmoviles.andres.matchicesi.adapters.FriendsListAdapter;
-import com.appmoviles.andres.matchicesi.model.Friend;
 import com.appmoviles.andres.matchicesi.model.Friendship;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

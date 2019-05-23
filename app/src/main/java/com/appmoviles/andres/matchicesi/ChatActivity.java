@@ -10,34 +10,44 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.adapters.MessagesAdapter;
 import com.appmoviles.andres.matchicesi.model.Message;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String idMio;
-    private String idAmigo;
-    private String idChat;
+    private String myId;
+    private String friendId;
+    private String chatId;
+    private String friendName;
+    private String myName;
 
     private MessagesAdapter messagesAdapter;
-    private RecyclerView lista_mensajes;
+    private RecyclerView messagesList;
+    private EditText etMessage;
+    private Button btnSendMessage;
+    private ImageView btnGoBack;
+    private TextView tvFriendName;
 
-    private EditText txt_mensaje;
-    private Button btn_enviar_mensaje;
-
-    private ArrayList<Message> lista;
+    private ArrayList<Message> list;
 
     FirebaseAuth auth;
     FirebaseDatabase rtdb;
+    FirebaseFirestore store;
 
 
     @Override
@@ -47,49 +57,79 @@ public class ChatActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         rtdb = FirebaseDatabase.getInstance();
+        store = FirebaseFirestore.getInstance();
 
-        idMio = auth.getCurrentUser().getUid();
+        tvFriendName = findViewById(R.id.tv_friend_name);
+
+        btnGoBack = findViewById(R.id.btn_go_back);
+        btnGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        myId = auth.getCurrentUser().getUid();
 
         if (getIntent().hasExtra("id")) {
-            idAmigo = getIntent().getStringExtra("id");
-        } else {
-
+            friendId = getIntent().getStringExtra("id");
         }
 
-        lista_mensajes = findViewById(R.id.lista_chat);
-        lista_mensajes.setLayoutManager(new LinearLayoutManager(this));
+        store.collection("users").document(friendId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        friendName = document.get("names").toString();
+                        tvFriendName.setText(friendName);
+                    }
+                }
+            }
+        });
 
-        btn_enviar_mensaje = findViewById(R.id.btn_enviar_mensaje);
-        txt_mensaje = findViewById(R.id.txt_mensaje);
-        lista = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(lista);
-        lista_mensajes.setAdapter(messagesAdapter);
-        lista_mensajes.setHasFixedSize(true);
+        store.collection("users").document(myId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        myName = document.get("names").toString();
+                    }
+                }
+            }
+        });
 
 
-        initChat();
+        messagesList = findViewById(R.id.lista_chat);
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        layout.setReverseLayout(true);
+        messagesList.setLayoutManager(layout);
 
+        btnSendMessage = findViewById(R.id.btn_enviar_mensaje);
+        etMessage = findViewById(R.id.txt_mensaje);
+
+        list = new ArrayList<>();
+        messagesAdapter = new MessagesAdapter(list);
+
+        initialize();
     }
 
-    private void initChat() {
-
-        rtdb.getReference().child("chats").child(idMio).child(idAmigo).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void initialize() {
+        rtdb.getReference().child("chats").child(myId).child(friendId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
-                    String key = rtdb.getReference().child("chats").child(idMio).child(idAmigo).push().getKey();
-                    rtdb.getReference().child("chats").child(idMio).child(idAmigo).setValue(key);
-                    rtdb.getReference().child("chats").child(idAmigo).child(idMio).setValue(key);
-                    idChat = key;
-                    messagesAdapter = new MessagesAdapter(new ArrayList<Message>());
-
+                    String key = rtdb.getReference().child("chats").child(myId).child(friendId).push().getKey();
+                    rtdb.getReference().child("chats").child(myId).child(friendId).setValue(key);
+                    rtdb.getReference().child("chats").child(friendId).child(myId).setValue(key);
+                    chatId = key;
                 } else {
-                    idChat = dataSnapshot.getValue(String.class);
+                    chatId = dataSnapshot.getValue(String.class);
 
                 }
-                cargarMensajes();
-                activeListenerBottom();
-
+                loadMessages();
+                activeSendButton();
             }
 
             @Override
@@ -99,12 +139,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void cargarMensajes() {
+    private void loadMessages() {
 
-        rtdb.getReference().child("mensajes").child(idChat).addChildEventListener(new ChildEventListener() {
+        rtdb.getReference().child("messages").child(chatId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                lista.add(dataSnapshot.getValue(Message.class));
+                list.add(0, dataSnapshot.getValue(Message.class));
                 messagesAdapter.notifyDataSetChanged();
             }
 
@@ -132,21 +172,19 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void activeListenerBottom() {
-        lista_mensajes.setAdapter(messagesAdapter);
-        lista_mensajes.setHasFixedSize(true);
-
-
-        btn_enviar_mensaje.setOnClickListener(new View.OnClickListener() {
+    private void activeSendButton() {
+        messagesList.setAdapter(messagesAdapter);
+        messagesList.setHasFixedSize(true);
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mensaje = txt_mensaje.getText().toString();
-                Message men = new Message();
-                men.setText(mensaje);
-                men.setId(idMio);
-                rtdb.getReference().child("mensajes").child(idChat).push().setValue(men);
-                txt_mensaje.setText("");
-
+                String text = etMessage.getText().toString();
+                Message message = new Message();
+                message.setText(text);
+                message.setId(myId);
+                message.setName(myName);
+                rtdb.getReference().child("messages").child(chatId).push().setValue(message);
+                etMessage.setText("");
             }
         });
     }
