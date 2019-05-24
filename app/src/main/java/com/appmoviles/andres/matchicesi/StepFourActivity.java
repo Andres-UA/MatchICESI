@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
@@ -23,11 +24,14 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
     private String[] descriptionData = {"Tu", "Peliculas", "Musica", "Libros", "Salidas"};
     private ArrayList<String> items = new ArrayList<>();
 
+    private ArrayList<String> books = new ArrayList<>();
+    private int bookRank = 1;
+
     private StateProgressBar stateProgressBar;
     private SpinnerDialog spinnerDialog;
 
     private SeekBar sbBookRank;
-
+    private TextView tvBookValue;
 
     private ItemListAdapter bookListAdapter;
     private RecyclerView rvBookList;
@@ -45,8 +49,12 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
 
         if (getIntent().getExtras().getSerializable("userData") != null) {
             userData = (UserData) getIntent().getExtras().getSerializable("userData");
-        } else {
-            userData = new UserData();
+            if (userData.getBooks() != null) {
+                books = userData.getBooks();
+            }
+            if (userData.getBookRank() != 1) {
+                bookRank = userData.getBookRank();
+            }
         }
 
         items.add("La novela de ciencia ficción");
@@ -62,6 +70,10 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         stateProgressBar.setStateDescriptionData(descriptionData);
 
         sbBookRank = findViewById(R.id.sb_book);
+        sbBookRank.setProgress(bookRank - 1);
+
+        tvBookValue = findViewById(R.id.book_value);
+        tvBookValue.setText(bookRank + "");
 
         btnAdd = findViewById(R.id.four_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +87,9 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setData();
                 Intent intent = new Intent(StepFourActivity.this, StepThreeActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
@@ -84,13 +98,7 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                int bookRank = sbBookRank.getProgress();
-                ArrayList<String> books = bookListAdapter.getData();
-
-                userData.setBookRank(bookRank+1);
-                userData.setBooks(books);
-
+                setData();
                 Intent intent = new Intent(StepFourActivity.this, StepFiveActivity.class);
                 intent.putExtra("userData", userData);
                 startActivity(intent);
@@ -100,11 +108,29 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         rvBookList = findViewById(R.id.list_books);
 
         bookListAdapter = new ItemListAdapter();
+        bookListAdapter.setData(books);
         bookListAdapter.setListener(this);
 
         rvBookList.setLayoutManager(new LinearLayoutManager(this));
         rvBookList.setAdapter(bookListAdapter);
         rvBookList.setHasFixedSize(true);
+
+        sbBookRank.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                bookRank = progressChangedValue + 1;
+                tvBookValue.setText("" + bookRank);
+            }
+        });
 
         //spinnerDialog=new SpinnerDialog(StepOneActivity.this,items,"Select or Search City","Close Button Text");// With No Animation
         spinnerDialog = new SpinnerDialog(StepFourActivity.this, items, "Select or Search City", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
@@ -120,6 +146,12 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
             }
         });
 
+    }
+
+    public void setData() {
+        ArrayList<String> books = bookListAdapter.getData();
+        userData.setBookRank(bookRank);
+        userData.setBooks(books);
     }
 
     @Override

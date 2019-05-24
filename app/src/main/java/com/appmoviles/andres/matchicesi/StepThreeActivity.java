@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
@@ -23,10 +24,14 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
     private String[] descriptionData = {"Tu", "Peliculas", "Musica", "Libros", "Salidas"};
     private ArrayList<String> items = new ArrayList<>();
 
+    private ArrayList<String> musics = new ArrayList<>();
+    private int musicRank = 1;
+
     private StateProgressBar stateProgressBar;
     private SpinnerDialog spinnerDialog;
 
     private SeekBar sbMusicRank;
+    private TextView tvMusicValue;
 
     private ItemListAdapter musicListAdapter;
     private RecyclerView rvMusicList;
@@ -44,8 +49,12 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
 
         if (getIntent().getExtras().getSerializable("userData") != null) {
             userData = (UserData) getIntent().getExtras().getSerializable("userData");
-        } else {
-            userData = new UserData();
+            if (userData.getMusics() != null) {
+                musics = userData.getMusics();
+            }
+            if (userData.getMusicRank() != 1) {
+                musicRank = userData.getMusicRank();
+            }
         }
 
         items.add("Blues");
@@ -79,6 +88,10 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         stateProgressBar.setStateDescriptionData(descriptionData);
 
         sbMusicRank = findViewById(R.id.sb_music);
+        sbMusicRank.setProgress(musicRank - 1);
+
+        tvMusicValue = findViewById(R.id.music_value);
+        tvMusicValue.setText(musicRank + "");
 
         btnAdd = findViewById(R.id.three_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +105,9 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setData();
                 Intent intent = new Intent(StepThreeActivity.this, StepTwoActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
@@ -101,22 +116,33 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                int musicRank = sbMusicRank.getProgress();
-                ArrayList<String> musics = musicListAdapter.getData();
-
-                userData.setMusicRank(musicRank+1);
-                userData.setMusics(musics);
-
+                setData();
                 Intent intent = new Intent(StepThreeActivity.this, StepFourActivity.class);
                 intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
 
+        sbMusicRank.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                musicRank = progressChangedValue + 1;
+                tvMusicValue.setText("" + musicRank);
+            }
+        });
+
         rvMusicList = findViewById(R.id.list_music);
 
         musicListAdapter = new ItemListAdapter();
+        musicListAdapter.setData(musics);
         musicListAdapter.setListener(this);
 
         rvMusicList.setLayoutManager(new LinearLayoutManager(this));
@@ -137,6 +163,12 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
             }
         });
 
+    }
+
+    public void setData() {
+        ArrayList<String> musics = musicListAdapter.getData();
+        userData.setMusicRank(musicRank);
+        userData.setMusics(musics);
     }
 
     @Override

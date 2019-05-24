@@ -21,6 +21,11 @@ public class SpecialListAdapter extends RecyclerView.Adapter<SpecialListAdapter.
     private ArrayList<String> data;
     private final StartDragListener mStartDragListener;
 
+    public void setData(ArrayList<String> funs) {
+        this.data = funs;
+        notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;

@@ -28,6 +28,7 @@ import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 public class StepFiveActivity extends AppCompatActivity implements StartDragListener {
 
     private String[] descriptionData = {"Tu", "Peliculas", "Musica", "Libros", "Salidas"};
+    private ArrayList<String> funs = new ArrayList<>();
 
     private StateProgressBar stateProgressBar;
 
@@ -51,8 +52,9 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
 
         if (getIntent().getExtras().getSerializable("userData") != null) {
             userData = (UserData) getIntent().getExtras().getSerializable("userData");
-        } else {
-            userData = new UserData();
+            if (userData.getFuns() != null) {
+                funs = userData.getFuns();
+            }
         }
 
         stateProgressBar = findViewById(R.id.progress_step_five);
@@ -62,7 +64,10 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> funs = funListAdapter.getData();
+                userData.setFuns(funs);
                 Intent intent = new Intent(StepFiveActivity.this, StepFourActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
         });
@@ -71,11 +76,8 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ArrayList<String> funs = funListAdapter.getData();
-
                 userData.setFuns(funs);
-
                 Intent intent = new Intent(StepFiveActivity.this, FinishActivity.class);
                 intent.putExtra("userData", userData);
                 startActivity(intent);
@@ -84,13 +86,16 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
 
         rvFunList = findViewById(R.id.list_fun);
 
+
         dataset.add("Salir a cine/teatro");
         dataset.add("Salir a discoteca");
         dataset.add("Salir a comer");
         dataset.add("Salir a caminar");
 
+        if (!funs.isEmpty()) {
+            dataset = funs;
+        }
         funListAdapter = new SpecialListAdapter(dataset, this);
-
 
         ItemTouchHelper.Callback callback =
                 new ItemMoveCallback(funListAdapter);

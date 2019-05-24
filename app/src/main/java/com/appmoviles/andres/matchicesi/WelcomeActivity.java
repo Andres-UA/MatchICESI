@@ -6,21 +6,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.appmoviles.andres.matchicesi.model.UserData;
+
 public class WelcomeActivity extends AppCompatActivity {
 
-    MaterialButton Btnbegin;
+    MaterialButton btnBegin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        Btnbegin = findViewById(R.id.btn_begin);
+        btnBegin = findViewById(R.id.btn_begin);
 
-        Btnbegin.setOnClickListener(new View.OnClickListener() {
+        btnBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserData userData = new UserData();
                 Intent intent = new Intent(WelcomeActivity.this, StepOneActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
                 finish();
             }

@@ -43,6 +43,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.Custom
         notifyDataSetChanged();
     }
 
+    public void setData(ArrayList<String> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     public ArrayList<String> getData() {
         return data;
     }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
@@ -23,6 +24,8 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
     private String[] descriptionData = {"Tu", "Peliculas", "Musica", "Libros", "Salidas"};
     private ArrayList<String> items = new ArrayList<>();
 
+    private ArrayList<String> descriptors = new ArrayList<>();
+
     private StateProgressBar stateProgressBar;
     private SpinnerDialog spinnerDialog;
 
@@ -32,6 +35,8 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
     private MaterialButton btnAdd;
     private MaterialButton btnNext;
 
+    private UserData userData;
+
     FirebaseAuth auth;
 
     @Override
@@ -40,6 +45,13 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         setContentView(R.layout.activity_step_one);
 
         auth = FirebaseAuth.getInstance();
+
+        if (getIntent().getExtras().getSerializable("userData") != null) {
+            userData = (UserData) getIntent().getExtras().getSerializable("userData");
+            if (userData.getDescriptors() != null) {
+                descriptors = userData.getDescriptors();
+            }
+        }
 
         items.add("Abierto");
         items.add("Chistoso");
@@ -65,7 +77,6 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserData userData = new UserData();
                 userData.setId(auth.getCurrentUser().getUid());
                 userData.setDescriptors(identityListAdapter.getData());
                 Intent intent = new Intent(StepOneActivity.this, StepTwoActivity.class);
@@ -77,6 +88,7 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         rvIdentityList = findViewById(R.id.list_identity);
 
         identityListAdapter = new ItemListAdapter();
+        identityListAdapter.setData(descriptors);
         identityListAdapter.setListener(this);
 
         rvIdentityList.setLayoutManager(new LinearLayoutManager(this));
@@ -95,6 +107,10 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
                 identityListAdapter.addItem(item);
             }
         });
+    }
+
+    public void initialize() {
+
     }
 
     @Override

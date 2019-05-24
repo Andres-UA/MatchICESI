@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.appmoviles.andres.matchicesi.adapters.FriendsListAdapter;
 import com.appmoviles.andres.matchicesi.model.Friendship;
@@ -22,6 +24,9 @@ public class ChatFragment extends Fragment {
 
     private RecyclerView rvFriendsList;
     private FriendsListAdapter friendsAdapter;
+
+    private RelativeLayout layout_not_friends;
+    private ScrollView layout;
 
     FirebaseFirestore store;
     FirebaseAuth auth;
@@ -47,6 +52,8 @@ public class ChatFragment extends Fragment {
         rvFriendsList = view.findViewById(R.id.rv_friends_list);
         friendsAdapter = new FriendsListAdapter();
 
+        layout_not_friends = view.findViewById(R.id.layout_not_chat);
+        layout = view.findViewById(R.id.layout_chat);
         rvFriendsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvFriendsList.setAdapter(friendsAdapter);
         rvFriendsList.setHasFixedSize(true);
@@ -56,13 +63,19 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            boolean empty = true;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Friendship friendship = document.toObject(Friendship.class);
                                 if (friendship.getReceiver().equals(auth.getCurrentUser().getUid()) || friendship.getSender().equals(auth.getCurrentUser().getUid())) {
                                     if (friendship.getState().equals("FRIENDSHIP")) {
                                         friendsAdapter.addFriend(friendship);
+                                        empty = false;
                                     }
                                 }
+                            }
+                            if (empty) {
+                                layout_not_friends.setVisibility(View.VISIBLE);
+                                layout.setVisibility(View.INVISIBLE);
                             }
                         }
                     }

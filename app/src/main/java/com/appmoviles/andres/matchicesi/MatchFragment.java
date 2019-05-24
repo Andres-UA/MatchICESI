@@ -74,7 +74,7 @@ public class MatchFragment extends Fragment implements CardStackListener {
         adapter = new MatchAdapter();
         manager = new CardStackLayoutManager(getActivity(), this);
 
-        manager.setStackFrom(StackFrom.Top);
+        manager.setStackFrom(StackFrom.None);
         manager.setVisibleCount(3);
         manager.setTranslationInterval(8.0f);
         manager.setScaleInterval(0.95f);
