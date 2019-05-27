@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Preferencias de búsqueda"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="¿De qué edad te gustaria conocer personas?" />
+
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/age_range"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:rsb_indicator_height="40dp"
+        app:rsb_indicator_padding_bottom="10dp"
+        app:rsb_indicator_width="40dp"
+        app:rsb_max="30"
+        app:rsb_min="18"
+        app:rsb_mode="range"
+        app:rsb_progress_color="@color/colorAccent"
+        app:rsb_progress_default_color="@color/rsbColorSeekBarDefault"
+        app:rsb_progress_height="5dp"
+        app:rsb_range_interval="1"
+        app:rsb_thumb_drawable="@drawable/thumb_activated"
+        app:rsb_thumb_inactivated_drawable="@drawable/thumb_inactivated"
+        app:rsb_thumb_scale_ratio="1.2"
+        app:rsb_thumb_size="30dp"
+        app:rsb_tick_mark_mode="number"
+        app:rsb_tick_mark_number="1"
+        app:rsb_tick_mark_text_array="@array/markArray2"
+        app:rsb_tick_mark_text_margin="17dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="¿De qué genero te gustaria encontrar personas?" />
+
+    <CheckBox
+        android:id="@+id/cb_male"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Hombres" />
+
+    <CheckBox
+        android:id="@+id/cb_female"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mujeres" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/preferences_btn_accept"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Aceptar"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/preferences_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancelar" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

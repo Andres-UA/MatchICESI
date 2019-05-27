@@ -4,15 +4,17 @@ public class Match {
 
     private String id;
     private String name;
+    private String description;
     private String image;
     private int age;
 
     public Match() {
     }
 
-    public Match(String id, String name, String image, int age) {
+    public Match(String id, String name, String description, String image, int age) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.image = image;
         this.age = age;
     }
@@ -31,6 +33,14 @@ public class Match {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImage() {

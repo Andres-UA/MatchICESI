@@ -10,7 +10,7 @@
         android:id="@+id/request_item">
 
         <ImageView
-            android:id="@+id/playlist_image"
+            android:id="@+id/request_item_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@color/colorPrimary" />

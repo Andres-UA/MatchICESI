@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecoveryPasswordActivity"></activity>
+        <activity android:name=".SearchPreferencesActivity"></activity>
+        <activity android:name=".RecoveryPasswordActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".FinishActivity" />

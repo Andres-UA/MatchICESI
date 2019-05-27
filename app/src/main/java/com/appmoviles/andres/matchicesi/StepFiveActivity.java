@@ -86,7 +86,6 @@ public class StepFiveActivity extends AppCompatActivity implements StartDragList
 
         rvFunList = findViewById(R.id.list_fun);
 
-
         dataset.add("Salir a cine/teatro");
         dataset.add("Salir a discoteca");
         dataset.add("Salir a comer");

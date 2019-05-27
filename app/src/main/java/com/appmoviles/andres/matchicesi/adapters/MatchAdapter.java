@@ -33,6 +33,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
     public MatchAdapter() {
         data = new ArrayList<>();
     }
@@ -60,7 +64,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ((TextView) holder.root.findViewById(R.id.match_item_name)).setText(data.get(position).getName());
-        ((TextView) holder.root.findViewById(R.id.match_item_age)).setText("Descripción...");
+        ((TextView) holder.root.findViewById(R.id.match_item_age)).setText(data.get(position).getDescription());
         Glide.with(holder.root.findViewById(R.id.item_image)).load(data.get(position).getImage()).into((ImageView) holder.root.findViewById(R.id.item_image));
     }
 

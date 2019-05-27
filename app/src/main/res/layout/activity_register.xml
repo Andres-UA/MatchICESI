@@ -164,16 +164,17 @@
                 </FrameLayout>
 
                 <LinearLayout
+                    android:layout_marginBottom="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="30dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="¿Ya tiene cuenta?"
+                        android:text="¿Ya tienes una cuenta?"
                         android:textSize="16sp" />
 
                     <TextView
@@ -181,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="Entrar"
+                        android:text="¡Entra!"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -189,14 +190,6 @@
             </LinearLayout>
 
         </ScrollView>
-
-
-        <View
-            android:id="@+id/revealView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:visibility="invisible" />
 
     </RelativeLayout>
 </layout>

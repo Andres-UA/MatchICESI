@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.R;
 import com.appmoviles.andres.matchicesi.model.Friendship;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -65,6 +67,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.CustomVi
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         ((TextView) holder.root.findViewById(R.id.request_item_list_name)).setText(document.get("names").toString());
+                        Glide.with(holder.root.getContext()).load(document.get("profilePic").toString()).into((ImageView) holder.root.findViewById(R.id.request_item_image));
                     }
                 }
             }

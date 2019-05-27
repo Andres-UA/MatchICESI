@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
@@ -77,11 +78,15 @@ public class StepOneActivity extends AppCompatActivity implements ItemListAdapte
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userData.setId(auth.getCurrentUser().getUid());
-                userData.setDescriptors(identityListAdapter.getData());
-                Intent intent = new Intent(StepOneActivity.this, StepTwoActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (identityListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepOneActivity.this, "Agrega por lo menos un descriptor", Toast.LENGTH_LONG).show();
+                } else {
+                    userData.setId(auth.getCurrentUser().getUid());
+                    userData.setDescriptors(identityListAdapter.getData());
+                    Intent intent = new Intent(StepOneActivity.this, StepTwoActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 

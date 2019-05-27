@@ -89,10 +89,14 @@ public class StepTwoActivity extends AppCompatActivity implements ItemListAdapte
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepTwoActivity.this, StepOneActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (userData.getMovies().isEmpty()) {
+                    Toast.makeText(StepTwoActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepTwoActivity.this, StepOneActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -100,10 +104,14 @@ public class StepTwoActivity extends AppCompatActivity implements ItemListAdapte
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepTwoActivity.this, StepThreeActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (movieListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepTwoActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepTwoActivity.this, StepThreeActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 

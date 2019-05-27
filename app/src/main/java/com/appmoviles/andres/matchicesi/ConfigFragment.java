@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.appmoviles.andres.matchicesi.adapters.RequestAdapter;
 import com.appmoviles.andres.matchicesi.model.Friendship;
@@ -24,6 +25,8 @@ public class ConfigFragment extends Fragment {
 
     FirebaseFirestore store;
     FirebaseAuth auth;
+
+    Button btnSearchPreferences;
 
     MaterialButton btnLogout;
 
@@ -45,8 +48,16 @@ public class ConfigFragment extends Fragment {
         store = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        btnLogout = view.findViewById(R.id.btn_logout);
+        btnSearchPreferences = view.findViewById(R.id.btn_search_preferences);
+        btnSearchPreferences.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchPreferencesActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        btnLogout = view.findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

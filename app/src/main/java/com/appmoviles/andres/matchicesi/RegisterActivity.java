@@ -217,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String uid = auth.getCurrentUser().getUid();
-                User user = new User(uid, names, surnames, email, newBirthDate, career, genre, true, "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png","");
+                User user = new User(uid, names, surnames, email, newBirthDate, career, genre, true, "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png", "");
 
                 firestore.collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -237,6 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 public void onComplete(@NonNull Task task) {
 
                                                     if (task.isSuccessful()) {
+                                                        fadeOutProgressDialog();
                                                         Toast.makeText(getApplicationContext(),
                                                                 "Correo electrónico de verificación enviado a " + email + ".",
                                                                 Toast.LENGTH_LONG).show();
@@ -322,7 +323,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void run() {
                 register();
-                fadeOutProgressDialog();
+
                 //test
             }
         }, 100);

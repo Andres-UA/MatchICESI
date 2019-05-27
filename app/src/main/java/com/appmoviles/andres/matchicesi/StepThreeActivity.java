@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
@@ -105,10 +106,14 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepThreeActivity.this, StepTwoActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (musicListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepThreeActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepThreeActivity.this, StepTwoActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -116,10 +121,14 @@ public class StepThreeActivity extends AppCompatActivity implements ItemListAdap
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepThreeActivity.this, StepFourActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (musicListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepThreeActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepThreeActivity.this, StepFourActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 

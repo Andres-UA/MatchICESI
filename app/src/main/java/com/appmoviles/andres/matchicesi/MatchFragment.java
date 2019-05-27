@@ -183,7 +183,7 @@ public class MatchFragment extends Fragment implements CardStackListener {
                                                                         calendar.setTime(user.getBirthDate());
                                                                         int age = age(calendar);
 
-                                                                        Match match = new Match(user.getId(), user.getNames(), user.getProfilePic(), age);
+                                                                        Match match = new Match(user.getId(), user.getNames(), user.getDescription(), user.getProfilePic(), age);
                                                                         adapter.addMatch(match);
                                                                     }
                                                                 }
@@ -261,6 +261,9 @@ public class MatchFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDisappeared(View view, int position) {
         //Log.e(">>>", "onCardDisappeared: > " + position);
+        if (adapter.isEmpty()) {
+            layout.setVisibility(View.VISIBLE);
+        }
     }
 
     private MatchData match(UserData me, UserData user, ArrayList<Friendship> friendships) {

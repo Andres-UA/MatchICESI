@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.appmoviles.andres.matchicesi.model.SearchPreferences;
 import com.appmoviles.andres.matchicesi.model.UserData;
 import com.appmoviles.andres.matchicesi.util.Util;
 import com.bumptech.glide.Glide;
@@ -40,13 +41,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.UUID;
 
+import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
+
 public class FinishActivity extends AppCompatActivity {
 
     private static final int CAMERA_CALLBACK_ID = 100;
     private static final int GALLERY_CALLBACK_ID = 101;
 
     private MaterialButton btnFinish;
-    private EditText description;
+    private ExtendedEditText description;
 
     private ImageView img_principal;
     private Button btn_take_pic;
@@ -102,17 +105,20 @@ public class FinishActivity extends AppCompatActivity {
                                 store.collection("users").document(uid).update("description", description.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Intent intent = new Intent(FinishActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        SearchPreferences searchPreferences = new SearchPreferences(18, 30, true, true);
+                                        store.collection("search_preferences").document(auth.getCurrentUser().getUid()).set(searchPreferences).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Intent intent = new Intent(FinishActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
                                     }
                                 });
-
                             }
                         });
-
                     }
                 });
-
             }
         });
 

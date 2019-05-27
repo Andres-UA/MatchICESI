@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appmoviles.andres.matchicesi.adapters.ItemListAdapter;
 import com.appmoviles.andres.matchicesi.model.UserData;
@@ -87,10 +88,14 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepFourActivity.this, StepThreeActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (bookListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepFourActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepFourActivity.this, StepThreeActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -98,10 +103,14 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
-                Intent intent = new Intent(StepFourActivity.this, StepFiveActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if (bookListAdapter.getData().isEmpty()) {
+                    Toast.makeText(StepFourActivity.this, "Agrega por lo menos un genero", Toast.LENGTH_LONG).show();
+                } else {
+                    setData();
+                    Intent intent = new Intent(StepFourActivity.this, StepFiveActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -133,7 +142,7 @@ public class StepFourActivity extends AppCompatActivity implements ItemListAdapt
         });
 
         //spinnerDialog=new SpinnerDialog(StepOneActivity.this,items,"Select or Search City","Close Button Text");// With No Animation
-        spinnerDialog = new SpinnerDialog(StepFourActivity.this, items, "Select or Search City", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
+        spinnerDialog = new SpinnerDialog(StepFourActivity.this, items, "Selecciona o busca un genero", R.style.DialogAnimations_SmileWindow, "Cerrar");// With 	Animation
 
         spinnerDialog.setCancellable(true); // for cancellable
         spinnerDialog.setShowKeyboard(false);// for open keyboard by default

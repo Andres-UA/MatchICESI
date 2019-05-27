@@ -43,6 +43,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.github.yalantis:ucrop:2.2.3'
+    implementation 'com.github.HITGIF:TextFieldBoxes:1.4.4'
+    implementation 'com.github.Jay-Goo:RangeSeekBar:2.0.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

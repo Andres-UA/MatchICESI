@@ -8,14 +8,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="100dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -40,8 +40,8 @@
 
             <ImageView
                 android:id="@+id/main_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
@@ -73,31 +73,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Y agrega una pequeña descripción que te identifique"
+                android:text="Agrega una pequeña descripción que te identifique"
                 android:textAlignment="center"
                 android:textSize="18dp" />
 
-            <EditText
-                android:id="@+id/description"
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/text_field_boxes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text|textMultiLine" />
+                android:layout_marginTop="20dp"
+                app:labelText="Descripción"
+                app:maxCharacters="120"
+                app:panelBackgroundColor="@color/white">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btn_begin"
+                style="@style/Base.Widget.AppCompat.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="40dp"
+                android:text="Terminar"
+                android:textColor="#fff" />
 
         </LinearLayout>
 
     </ScrollView>
-
-    <android.support.design.button.MaterialButton
-        android:id="@+id/btn_begin"
-        style="@style/Base.Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="40dp"
-        android:text="Terminar"
-        android:textColor="#fff" />
 
 
 </RelativeLayout>
