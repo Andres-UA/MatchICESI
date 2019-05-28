@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.appmoviles.andres.matchicesi.model.Photo;
+import com.appmoviles.andres.matchicesi.service.NotificationService;
 import com.appmoviles.andres.matchicesi.util.Util;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent service = new Intent(this, NotificationService.class);
+        startService(service);
 
         auth = FirebaseAuth.getInstance();
         store = FirebaseFirestore.getInstance();

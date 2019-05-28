@@ -15,6 +15,7 @@ import com.appmoviles.andres.matchicesi.adapters.MatchAdapter;
 import com.appmoviles.andres.matchicesi.model.Friendship;
 import com.appmoviles.andres.matchicesi.model.Match;
 import com.appmoviles.andres.matchicesi.model.MatchData;
+import com.appmoviles.andres.matchicesi.model.SearchPreferences;
 import com.appmoviles.andres.matchicesi.model.User;
 import com.appmoviles.andres.matchicesi.model.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +49,8 @@ public class MatchFragment extends Fragment implements CardStackListener {
     FirebaseAuth auth;
     FirebaseFirestore store;
 
+    private boolean empty;
+
     public MatchFragment() {
         // Required empty public constructor
     }
@@ -66,7 +69,7 @@ public class MatchFragment extends Fragment implements CardStackListener {
         store = FirebaseFirestore.getInstance();
 
         //getMatches();
-
+        empty = true;
 
         cardStackView = view.findViewById(R.id.card_stack_view);
         layout = view.findViewById(R.id.layout_match);
@@ -164,33 +167,72 @@ public class MatchFragment extends Fragment implements CardStackListener {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
-                                                boolean empty = true;
+
 
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     UserData userData = document.toObject(UserData.class);
 
-                                                    MatchData matchData = match(me, userData, friendships);
+                                                    final MatchData matchData = match(me, userData, friendships);
                                                     if (matchData != null) {
-                                                        store.collection("users").document(matchData.getUser()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    DocumentSnapshot document = task.getResult();
-                                                                    if (document.exists()) {
-                                                                        User user = document.toObject(User.class);
+                                                        if (matchData.getGlobal() >= 30) {
+                                                            store.collection("users").document(matchData.getUser()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        final DocumentSnapshot document = task.getResult();
+                                                                        if (document.exists()) {
+                                                                            final User user = document.toObject(User.class);
 
-                                                                        GregorianCalendar calendar = new GregorianCalendar();
-                                                                        calendar.setTime(user.getBirthDate());
-                                                                        int age = age(calendar);
+                                                                            store.collection("search_preferences").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                    if (task.isSuccessful()) {
+                                                                                        DocumentSnapshot documentSnapshot = task.getResult();
+                                                                                        if (document.exists()) {
 
-                                                                        Match match = new Match(user.getId(), user.getNames(), user.getDescription(), user.getProfilePic(), age);
-                                                                        adapter.addMatch(match);
+                                                                                            SearchPreferences searchPreferences = documentSnapshot.toObject(SearchPreferences.class);
+
+                                                                                            GregorianCalendar calendar = new GregorianCalendar();
+                                                                                            calendar.setTime(user.getBirthDate());
+                                                                                            int age = age(calendar);
+
+                                                                                            boolean all = false;
+                                                                                            String genre = "";
+                                                                                            if (searchPreferences.isFemale() && searchPreferences.isMale()) {
+                                                                                                all = true;
+                                                                                            }
+                                                                                            if (searchPreferences.isMale()) {
+                                                                                                genre = "Hombre";
+                                                                                            }
+                                                                                            if (searchPreferences.isFemale()) {
+                                                                                                genre = "Mujer";
+                                                                                            }
+
+                                                                                            if (age >= searchPreferences.getMinAge() && age <= searchPreferences.getMaxAge()) {
+                                                                                                if (all) {
+                                                                                                    Match match = new Match(user.getId(), user.getNames(), user.getDescription(), user.getProfilePic(), age);
+                                                                                                    adapter.addMatch(match);
+                                                                                                    Log.e(">>>", "Match con: " + match.getName() + " con: " + matchData.getGlobal());
+                                                                                                    empty = false;
+                                                                                                } else {
+                                                                                                    if (user.getGenre().equals(genre)) {
+                                                                                                        Match match = new Match(user.getId(), user.getNames(), user.getDescription(), user.getProfilePic(), age);
+                                                                                                        adapter.addMatch(match);
+                                                                                                        Log.e(">>>", "Match con: " + match.getName() + " con: " + matchData.getGlobal());
+                                                                                                        empty = false;
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                        }
                                                                     }
                                                                 }
+                                                            });
 
-                                                            }
-                                                        });
-                                                        empty = false;
+                                                        }
                                                     }
                                                 }
                                                 if (empty) {
@@ -269,7 +311,6 @@ public class MatchFragment extends Fragment implements CardStackListener {
     private MatchData match(UserData me, UserData user, ArrayList<Friendship> friendships) {
         MatchData matchData = null;
         if (!me.getId().equals(user.getId())) {
-            Log.e(">>>", "TRUE => USER1-> " + me.getId() + " VS USER2-> " + user.getId());
             if (checkFriendship(friendships, me.getId(), user.getId()) == false) {
                 double identity = arrayMatch(me.getDescriptors(), user.getDescriptors());
                 double movie = arrayMatch(me.getMovies(), user.getMovies());
@@ -327,8 +368,6 @@ public class MatchFragment extends Fragment implements CardStackListener {
         if (me.get(3).equals(user.get(3))) {
             count += 1;
         }
-
-        double total = (double) count;
 
         double percent = count * 100 / (double) 4;
         return fix(percent, 2);
