@@ -57,13 +57,18 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
         tvRegister = findViewById(R.id.link_signup);
         etEmail = findViewById(R.id.input_email);
         etPassword = findViewById(R.id.input_password);
 
         tvRecovery = findViewById(R.id.link_recovery_password);
 
-        etEmail.setText("cristian.rodriguez@correo.icesi.edu.co");
+        etEmail.setText("@correo.icesi.edu.co");
         etPassword.setText("1234567");
 
         tvRegister.setOnClickListener(new View.OnClickListener() {

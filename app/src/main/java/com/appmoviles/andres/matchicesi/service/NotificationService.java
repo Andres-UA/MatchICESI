@@ -121,7 +121,7 @@ public class NotificationService extends Service {
         });
     }
 
-    private boolean checkConection() {
+    public boolean checkConection() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 

@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appmoviles.andres.matchicesi.adapters.MessagesAdapter;
+import com.appmoviles.andres.matchicesi.database.DBHandler;
 import com.appmoviles.andres.matchicesi.model.Message;
+import com.appmoviles.andres.matchicesi.service.NotificationService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase rtdb;
     FirebaseFirestore store;
+    DBHandler localdb;
 
 
     @Override
@@ -58,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         rtdb = FirebaseDatabase.getInstance();
         store = FirebaseFirestore.getInstance();
+        localdb = DBHandler.getInstance(this);
 
         tvFriendName = findViewById(R.id.tv_friend_name);
 
@@ -144,7 +148,9 @@ public class ChatActivity extends AppCompatActivity {
         rtdb.getReference().child("messages").child(chatId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                list.add(0, dataSnapshot.getValue(Message.class));
+                Message message = dataSnapshot.getValue(Message.class);
+                list.add(0, message);
+                //localdb.createMensaje(message, message.getId());
                 messagesAdapter.notifyDataSetChanged();
             }
 
