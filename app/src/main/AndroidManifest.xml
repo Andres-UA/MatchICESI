@@ -15,7 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchPreferencesActivity"></activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SearchPreferencesActivity" />
         <activity android:name=".RecoveryPasswordActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ChatActivity" />
@@ -26,12 +32,10 @@
         <activity android:name=".StepTwoActivity" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/SplashTheme">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".StepOneActivity" />
@@ -49,10 +53,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/providerpath" />
         </provider>
+
         <service
             android:name=".service.NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>

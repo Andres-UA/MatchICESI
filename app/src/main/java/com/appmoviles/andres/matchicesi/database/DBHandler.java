@@ -9,6 +9,7 @@ import android.util.Log;
 import com.appmoviles.andres.matchicesi.model.Message;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -16,13 +17,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     public static final String DB_NAME = "MatchICESI";
-    public static final int DB_VERSION = 1;
-    public static final String TABLE_CHATS = "Chats";
+    public static final int DB_VERSION = 4;
+    public static final String TABLE_CHATS = "chats";
+    public static final String ID = "id";
     public static final String IDCHAT = "idChat";
     public static final String IDMENSAJE = "idMensaje";
     public static final String CONTENIDO = "Contenido";
-    public static final String CREATE_CHAT_TABLE = "CREATE TABLE " + TABLE_CHATS + " (" + IDCHAT + " TEXT PRIMARY KEY, " + IDMENSAJE + " TEXT, " + CONTENIDO + " TEXT)";
-
+    public static final String CREATE_CHAT_TABLE = "CREATE TABLE " + TABLE_CHATS + " (" + ID + " TEXT PRIMARY KEY, " + IDCHAT + " TEXT, " + IDMENSAJE + " TEXT, " + CONTENIDO + " TEXT)";
 
     //TABLA AMIGOS
     public static synchronized DBHandler getInstance(Context context) {
@@ -32,11 +33,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return instance;
     }
 
-
     private DBHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -49,9 +48,10 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createMensaje(Message mensaje, String IDCHAT) {
+    public void createMensaje(Message mensaje, String idChat) {
+        String uid = UUID.randomUUID().toString();
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("INSERT INTO " + TABLE_CHATS + " (" + IDCHAT + ", " + IDMENSAJE + ", " + CONTENIDO + ") VALUES ('" + IDCHAT + "','" + mensaje.getId() + mensaje.getText() + "')");
+        db.execSQL("INSERT INTO " + TABLE_CHATS + " (" + ID + ", " + IDCHAT + ", " + IDMENSAJE + ", " + CONTENIDO + ") VALUES ('" + uid + "','" + idChat + "','" + mensaje.getId() + "','" + mensaje.getText() + "')");
         db.close();
     }
 
@@ -79,6 +79,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return respuesta;
+    }
+
+    public void deleteMessagesChat(String uid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_CHATS + " WHERE " + IDCHAT + "='" + uid + "'");
+        db.close();
     }
 
 }

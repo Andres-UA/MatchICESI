@@ -73,22 +73,23 @@ public class NotificationService extends Service {
     }
 
     private void friendshipNotifications() {
-        store.collection("friendship").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e(">>>", "Listen failed.", e);
-                    return;
-                }
+//        if (auth.getCurrentUser().getUid() != null) {
+            store.collection("friendship").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.e(">>>", "Listen failed.", e);
+                        return;
+                    }
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                boolean notifications = sharedPreferences.getBoolean("notification", true);
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    boolean notifications = sharedPreferences.getBoolean("notification", true);
 
-                if (notifications) {
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        Friendship friendship = doc.toObject(Friendship.class);
-                        if (friendship.getReceiver().equals(auth.getCurrentUser().getUid()) || friendship.getSender().equals(auth.getCurrentUser().getUid())) {
-                            if (friendship.getState().equals("REQUEST")) {
+                    if (notifications) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Friendship friendship = doc.toObject(Friendship.class);
+                            if (friendship.getReceiver().equals(auth.getCurrentUser().getUid()) || friendship.getSender().equals(auth.getCurrentUser().getUid())) {
+                                if (friendship.getState().equals("REQUEST")) {
 //
 //                            String id = friendship.getSender();
 //
@@ -96,29 +97,28 @@ public class NotificationService extends Service {
 //                                id = friendship.getReceiver();
 //                            }
 //
-                                if (auth.getCurrentUser().getUid().equals(friendship.getReceiver())) {
-                                    store.collection("users").document(friendship.getSender()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    showNotification(document.get("names").toString());
+                                    if (auth.getCurrentUser().getUid().equals(friendship.getReceiver())) {
+                                        store.collection("users").document(friendship.getSender()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        showNotification(document.get("names").toString());
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+
+
                                 }
-
-
                             }
                         }
                     }
                 }
-
-
-            }
-        });
+            });
+//        }
     }
 
     public boolean checkConection() {

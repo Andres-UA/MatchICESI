@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appmoviles.andres.matchicesi.model.SearchPreferences;
 import com.appmoviles.andres.matchicesi.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -215,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onSuccess(AuthResult authResult) {
+            public void onSuccess(final AuthResult authResult) {
                 String uid = auth.getCurrentUser().getUid();
                 User user = new User(uid, names, surnames, email, newBirthDate, career, genre, true, "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png", "");
 
@@ -241,7 +242,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                         Toast.makeText(getApplicationContext(),
                                                                 "Correo electrónico de verificación enviado a " + email + ".",
                                                                 Toast.LENGTH_LONG).show();
+
+                                                        SearchPreferences searchPreferences = new SearchPreferences(18, 30, true, true);
+
+                                                        firestore.collection("search_preferences").document(auth.getCurrentUser().getUid()).set(searchPreferences);
+
                                                         auth.signOut();
+
+
                                                         Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                                                         startActivity(i);
                                                         finish();

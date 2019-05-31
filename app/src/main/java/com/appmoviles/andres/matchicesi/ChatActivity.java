@@ -17,6 +17,7 @@ import com.appmoviles.andres.matchicesi.adapters.MessagesAdapter;
 import com.appmoviles.andres.matchicesi.database.DBHandler;
 import com.appmoviles.andres.matchicesi.model.Message;
 import com.appmoviles.andres.matchicesi.service.NotificationService;
+import com.appmoviles.andres.matchicesi.util.Network;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -104,7 +105,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-
         messagesList = findViewById(R.id.lista_chat);
         LinearLayoutManager layout = new LinearLayoutManager(this);
         layout.setReverseLayout(true);
@@ -116,10 +116,27 @@ public class ChatActivity extends AppCompatActivity {
         list = new ArrayList<>();
         messagesAdapter = new MessagesAdapter(list);
 
+//        if (Network.isOnlineNet()) {
+//            initialize();
+//            Log.e(">>>","ONLINE MODE");
+//        } else {
+//            Log.e(">>>","OFFLINE MODE");
+//            initializeOffline();
+//        }
         initialize();
     }
 
+    private void initializeOffline() {
+        ArrayList<Message> messages = localdb.getAllMensajesUserWithIdChat(chatId);
+        for (Message message : messages) {
+            Log.e(">>>", "Mensaje: " + message.getText());
+            list.add(0, message);
+            messagesAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void initialize() {
+
         rtdb.getReference().child("chats").child(myId).child(friendId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -144,13 +161,13 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-
+        localdb.deleteMessagesChat(chatId);
         rtdb.getReference().child("messages").child(chatId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Message message = dataSnapshot.getValue(Message.class);
                 list.add(0, message);
-                //localdb.createMensaje(message, message.getId());
+                localdb.createMensaje(message, chatId);
                 messagesAdapter.notifyDataSetChanged();
             }
 
