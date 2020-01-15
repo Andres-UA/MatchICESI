@@ -38,7 +38,6 @@ public class ChatActivity extends AppCompatActivity {
     private String chatId;
     private String friendName;
     private String myName;
-
     private MessagesAdapter messagesAdapter;
     private RecyclerView messagesList;
     private EditText etMessage;
